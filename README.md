@@ -28,7 +28,7 @@ A responsive and theme-switchable TODO List web application built using HTML, CS
 
 ## 📂 How to Use
 
-1. **Clone the repository**: git clone https://github.com/ParamveerSingh19/TO-DO-LIST.git
+1. **Clone the repository**: git clone [https://github.com/ParamveerSingh19/TO-DO-LIST.git](https://github.com/ParamveerSingh19/TaskFlow)
 2. **Navigate into the project folder**: cd TO-DO-LIST
 3. 3. **Open `index.html` in your browser**
 
