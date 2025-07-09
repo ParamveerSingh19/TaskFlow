@@ -1,29 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
 }
-
 body {
   transition: background-color 0.3s ease;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-/* Theme Switcher */
+} /* Theme Switcher */
 .theme-switcher {
   position: absolute;
   top: 16px;
   right: 16px;
   z-index: 100;
-}
-
-/* THEME COLORS */
+} /* THEME COLORS */
 body.theme-light {
   background-color: #ffffff;
   color: #111;
@@ -31,21 +25,7 @@ body.theme-light {
 body.theme-dark {
   background-color: #1e1e1e;
   color: #f1f1f1;
-}
-
-/* Dark mode input overrides */
-body.theme-dark input,
-body.theme-dark select,
-body.theme-dark button,
-body.theme-dark table,
-body.theme-dark th,
-body.theme-dark td {
-  background-color: rgba(30, 30, 30, 0.9) !important;
-  color: #f1f1f1 !important;
-  border-color: #444 !important;
-}
-
-/* Ensure elements stay readable */
+} /* Ensure elements stay readable */
 input,
 select,
 button,
@@ -58,7 +38,6 @@ td,
   color: #111 !important;
   border-color: #ccc !important;
 }
-
 .container {
   margin: 2rem;
   max-width: 1000px;
@@ -69,14 +48,12 @@ td,
   backdrop-filter: blur(5px);
   border-radius: 12px;
 }
-
 header h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-bottom: 10px;
   text-align: center;
 }
-
 .input-section {
   display: flex;
   gap: 10px;
@@ -84,20 +61,16 @@ header h1 {
   justify-content: center;
   margin-bottom: 20px;
 }
-
 .alert-message {
   transition: all 0.3s ease;
   transform: scale(0.95);
-  opacity: 0;
 }
 .alert-message.show {
   transform: scale(1);
-  opacity: 1;
 }
 .alert-message.hide {
   display: none;
 }
-
 .todos-filter {
   display: flex;
   justify-content: space-between;
@@ -106,98 +79,20 @@ header h1 {
   gap: 10px;
   margin-bottom: 10px;
 }
-
 .todos-list-body {
   width: 100%;
 }
-
 .todo-item td {
   vertical-align: middle;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
 }
-
-.todo-item .actions i:hover {
-  color: #007bff;
-  cursor: pointer;
-  transform: scale(1.1);
-  transition: transform 0.2s ease;
-}
-
 .author-text {
   text-align: center;
   margin: 20px 0;
   font-size: 0.875rem;
 }
-
-button.delete-all {
-  background-color: #dc3545;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  transition: background-color 0.3s ease;
-}
-button.delete-all:hover {
-  background-color: #c82333;
-}
-
-/* Focus styles for accessibility */
-button:focus,
-input:focus {
-  outline: 2px solid #007bff;
-  outline-offset: 2px;
-}
-
-/* Responsive Design */
 @media (max-width: 530px) {
   .container {
     margin: 1rem;
     width: 96%;
-    padding: 16px;
-  }
-
-  .input-section {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .todos-filter {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  table {
-    font-size: 0.85rem;
-  }
-
-  .todo-item td {
-    display: block;
-    width: 100%;
-    text-align: left;
-    padding: 8px 0;
-    border-bottom: 1px solid #ccc;
-  }
-
-  .todo-item tr {
-    display: block;
-    margin-bottom: 12px;
-    border-radius: 8px;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 10px;
-  }
-
-  .theme-switcher {
-    top: 10px;
-    right: 10px;
-  }
-
-  header h1 {
-    font-size: 1.5rem;
-  }
-
-  .author-text {
-    font-size: 0.75rem;
   }
 }
