@@ -1,0 +1,115 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  transition: background-color 0.3s ease;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Theme Switcher */
+.theme-switcher {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 100;
+}
+
+/* THEME COLORS */
+body.theme-light {
+  background-color: #ffffff;
+  color: #111;
+}
+body.theme-dark {
+  background-color: #1e1e1e;
+  color: #f1f1f1;
+}
+
+/* Ensure elements stay readable */
+input,
+select,
+button,
+table,
+th,
+td,
+.dropdown-content,
+.alert {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #111 !important;
+  border-color: #ccc !important;
+}
+
+.container {
+  margin: 2rem;
+  max-width: 1000px;
+  width: 100%;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+}
+
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.input-section {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.alert-message {
+  transition: all 0.3s ease;
+  transform: scale(0.95);
+}
+.alert-message.show {
+  transform: scale(1);
+}
+.alert-message.hide {
+  display: none;
+}
+
+.todos-filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.todos-list-body {
+  width: 100%;
+}
+
+.todo-item td {
+  vertical-align: middle;
+}
+
+.author-text {
+  text-align: center;
+  margin: 20px 0;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 530px) {
+  .container {
+    margin: 1rem;
+    width: 96%;
+  }
+}
