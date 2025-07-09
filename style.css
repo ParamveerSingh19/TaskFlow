@@ -15,15 +15,13 @@ body {
   align-items: center;
 }
 
-/* Theme Switcher */
 .theme-switcher {
-  position: absolute;
+  position: fixed;
   top: 16px;
   right: 16px;
   z-index: 100;
 }
 
-/* THEME COLORS */
 body.theme-light {
   background-color: #ffffff;
   color: #111;
@@ -33,7 +31,6 @@ body.theme-dark {
   color: #f1f1f1;
 }
 
-/* Ensure elements stay readable */
 input,
 select,
 button,
@@ -97,9 +94,10 @@ header h1 {
   width: 100%;
 }
 
-.todo-item td {
-  vertical-align: middle;
+table th,
+table td {
   text-align: center;
+  vertical-align: middle;
   padding: 10px;
 }
 
@@ -163,6 +161,7 @@ header h1 {
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     padding: 8px 0;
     border-bottom: 1px solid #ccc;
   }
@@ -176,11 +175,19 @@ header h1 {
     font-weight: 600;
     color: #555;
     margin-bottom: 4px;
+    text-align: center;
+    width: 100%;
   }
 
   .todo-item .actions {
     justify-content: center;
     gap: 12px;
+  }
+
+  .theme-switcher {
+    top: 10px;
+    right: 10px;
+    transform: scale(0.9);
   }
 
   .author-text {
