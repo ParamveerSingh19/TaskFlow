@@ -60,8 +60,8 @@
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
               <div class="relative w-full sm:col-span-2 md:col-span-1">
                 <input
-                  type="text"
-                  placeholder="Enter date (YYYY-MM-DD)"
+                  type="date"
+                  placeholder="dd-mm-yyyy"
                   class="input input-bordered w-full schedule-date"
                   id="schedule-date"
                   aria-label="Schedule Date"
@@ -70,8 +70,8 @@
 
               <div class="relative w-full sm:col-span-2 md:col-span-1">
                 <input
-                  type="text"
-                  placeholder="Enter time (HH:MM)"
+                  type="time"
+                  placeholder="--:--"
                   class="input input-bordered w-full schedule-time"
                   id="schedule-time"
                   aria-label="Schedule Time"
@@ -173,6 +173,10 @@
                   </li>
                 </ul>
               </div>
+
+              <button class="btn btn-error delete-all-button w-full">
+                <i class="bx bx-trash bx-sm"></i> Delete All
+              </button>
             </div>
           </div>
         </div>

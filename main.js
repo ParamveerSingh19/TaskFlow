@@ -2,8 +2,8 @@ class Todo {
   constructor(task, date, time, priority) {
     this.id = Date.now().toString(); // Unique ID based on timestamp
     this.task = task;
-    this.date = date;
-    this.time = time;
+    this.date = date; // Will be YYYY-MM-DD from HTML date input
+    this.time = time; // Will be HH:MM from HTML time input
     this.priority = priority;
     this.completed = false;
   }
@@ -22,6 +22,11 @@ class TodoManager {
   deleteTodo(id) {
     this.todos = this.todos.filter((todo) => todo.id !== id);
     this.saveTodos(); // Save immediately after deleting
+  }
+
+  deleteAllTodos() {
+    this.todos = []; // Empty the array
+    this.saveTodos(); // Save the empty array
   }
 
   toggleTodoComplete(id) {
@@ -68,6 +73,7 @@ class TodoManager {
   sortByDueDate() {
     this.todos.sort((a, b) => {
       // Treat tasks without dates/times as very far in the future
+      // If date or time is empty, treat it as a very late date
       const dateA =
         a.date && a.time
           ? new Date(`${a.date}T${a.time}`)
@@ -76,10 +82,6 @@ class TodoManager {
         b.date && b.time
           ? new Date(`${b.date}T${b.time}`)
           : new Date("2999-01-01T00:00:00");
-
-      // Handle invalid dates (e.g., if date string is malformed, though our inputs prevent this)
-      if (isNaN(dateA.getTime())) return 1; // Put invalid date at the end
-      if (isNaN(dateB.getTime())) return -1; // Put invalid date at the end
 
       return dateA.getTime() - dateB.getTime();
     });
@@ -100,8 +102,8 @@ class UIManager {
   constructor(todoManager) {
     this.todoManager = todoManager;
     this.taskInput = document.querySelector(".task-input");
-    this.dateInput = document.querySelector(".schedule-date");
-    this.timeInput = document.querySelector(".schedule-time");
+    this.dateInput = document.querySelector(".schedule-date"); // This will now be type="date"
+    this.timeInput = document.querySelector(".schedule-time"); // This will now be type="time"
     this.prioritySelect = document.querySelector(".priority-select");
     this.addTaskButton = document.querySelector(".add-task-button");
     this.todosList = document.getElementById("todos-list");
@@ -110,6 +112,7 @@ class UIManager {
     this.progressBar = document.getElementById("progress-bar");
 
     this.searchInput = document.querySelector(".search-input");
+    this.deleteAllButton = document.querySelector(".delete-all-button");
 
     this.currentFilter = "all"; // Default filter
     this.currentSearchQuery = ""; // Default search query
@@ -130,10 +133,8 @@ class UIManager {
       }
     });
 
-    // Event delegation for todo actions (complete, edit, delete) on the todosList container
     this.todosList.addEventListener("click", (e) => this.handleTodoActions(e));
 
-    // Theme switching event listeners
     document.querySelectorAll(".theme-item").forEach((item) => {
       item.addEventListener("click", (e) => {
         const theme = e.currentTarget.getAttribute("theme");
@@ -141,8 +142,11 @@ class UIManager {
       });
     });
 
-    // Search input event listener
     this.searchInput.addEventListener("input", () => this.handleSearch());
+
+    this.deleteAllButton.addEventListener("click", () =>
+      this.handleDeleteAllTodos()
+    );
   }
 
   setInitialTheme() {
@@ -152,7 +156,7 @@ class UIManager {
 
   setTheme(theme) {
     document.documentElement.setAttribute("data-theme", theme);
-    document.body.className = theme; // This sets the class for CSS variables
+    document.body.className = theme;
     localStorage.setItem("theme", theme);
   }
 
@@ -173,56 +177,30 @@ class UIManager {
     }, 3000);
   }
 
-  // Helper for date validation (YYYY-MM-DD)
-  isValidDate(dateString) {
-    const regex = /^\d{4}-\d{2}-\d{2}$/;
-    if (!dateString.match(regex)) return false;
-    const date = new Date(dateString);
-    const [year, month, day] = dateString.split("-").map(Number);
-    // Check for valid date parts and if Date object parses it correctly
-    return (
-      date.getFullYear() === year &&
-      date.getMonth() === month - 1 &&
-      date.getDate() === day
-    );
-  }
-
-  // Helper for time validation (HH:MM)
-  isValidTime(timeString) {
-    const regex = /^(?:2[0-3]|[01]?[0-9]):[0-5][0-9]$/; // 00:00 to 23:59
-    return timeString.match(regex);
-  }
-
   handleAddTodo() {
     const task = this.taskInput.value.trim();
-    const date = this.dateInput.value.trim();
-    const time = this.timeInput.value.trim();
+    const date = this.dateInput.value;
+    const time = this.timeInput.value;
     const priority = this.prioritySelect.value;
 
     if (!task) {
       this.showAlertMessage("Task description cannot be empty!", "error");
       return;
     }
-    if (!date) {
-      this.showAlertMessage("Date cannot be empty!", "error");
-      return;
-    }
-    if (!time) {
-      this.showAlertMessage("Time cannot be empty!", "error");
-      return;
-    }
 
-    if (!this.isValidDate(date)) {
+    // New logic: Check if date is empty
+    if (!date) {
       this.showAlertMessage(
-        "Please enter a valid date in YYYY-MM-DD format!",
+        "Date cannot be empty! Please select a date.",
         "error"
       );
       return;
     }
 
-    if (!this.isValidTime(time)) {
+    // New logic: Check if time is empty
+    if (!time) {
       this.showAlertMessage(
-        "Please enter a valid time in HH:MM format (e.g., 09:30 or 14:00)!",
+        "Time cannot be empty! Please select a time.",
         "error"
       );
       return;
@@ -230,10 +208,10 @@ class UIManager {
 
     const newTodo = new Todo(task, date, time, priority);
     this.todoManager.addTodo(newTodo);
-    this.renderTodos(); // Re-render to show new task and handle "No tasks yet!" removal
+    this.renderTodos();
     this.taskInput.value = "";
-    this.dateInput.value = "";
-    this.timeInput.value = "";
+    this.dateInput.value = ""; // Clear HTML date input
+    this.timeInput.value = ""; // Clear HTML time input
     this.prioritySelect.value = "low";
     this.showAlertMessage("Task added successfully!", "success");
     this.updateProgress();
@@ -241,9 +219,9 @@ class UIManager {
 
   handleTodoActions(e) {
     const card = e.target.closest(".card");
-    if (!card) return; // Click was not inside a todo card
+    if (!card) return;
 
-    const id = card.dataset.id; // Get the ID from the card's data attribute
+    const id = card.dataset.id;
 
     const deleteButton = e.target.closest(".delete-button");
     const completeButton = e.target.closest(".complete-button");
@@ -251,27 +229,45 @@ class UIManager {
 
     if (deleteButton) {
       this.todoManager.deleteTodo(id);
-      this.renderTodos(); // Re-render after deletion to update list and "No tasks yet!" state
+      this.renderTodos();
       this.showAlertMessage("Task deleted!", "success");
     } else if (completeButton) {
-      e.stopPropagation(); // Prevent card's click event from firing if checkbox is clicked directly
+      e.stopPropagation();
       this.todoManager.toggleTodoComplete(id);
       const updatedTodo = this.todoManager.todos.find((todo) => todo.id === id);
       if (updatedTodo) {
-        this._updateTodoCardInDOM(updatedTodo); // Update just the single card's appearance
+        this._updateTodoCardInDOM(updatedTodo);
       }
       this.showAlertMessage("Task status updated!", "success");
     } else if (editButton) {
       this.handleEditTodo(id);
     }
-    this.updateProgress(); // Always update progress after any action
+    this.updateProgress();
+  }
+
+  handleDeleteAllTodos() {
+    if (this.todoManager.todos.length === 0) {
+      this.showAlertMessage("No tasks to delete!", "info");
+      return;
+    }
+
+    const confirmDelete = confirm(
+      "Are you sure you want to delete all tasks? This action cannot be undone."
+    );
+    if (confirmDelete) {
+      this.todoManager.deleteAllTodos();
+      this.renderTodos();
+      this.showAlertMessage("All tasks deleted successfully!", "success");
+    } else {
+      this.showAlertMessage("Deletion cancelled.", "info");
+    }
+    this.updateProgress();
   }
 
   handleEditTodo(id) {
     const todo = this.todoManager.todos.find((t) => t.id === id);
     if (!todo) return;
 
-    // Use prompt for simplicity; for a more polished UI, a modal would be better
     const newTask = prompt("Edit task:", todo.task);
     const newDate = prompt("Edit date (YYYY-MM-DD):", todo.date);
     const newTime = prompt("Edit time (HH:MM):", todo.time);
@@ -291,17 +287,15 @@ class UIManager {
       return;
     }
 
-    // Basic validation for new inputs
+    // Basic validation for new inputs (task, date, time, and priority)
     if (
       !newTask.trim() ||
-      !newDate.trim() ||
-      !newTime.trim() ||
-      !this.isValidDate(newDate.trim()) || // Validate new date
-      !this.isValidTime(newTime.trim()) || // Validate new time
+      !newDate.trim() || // Now check if date is empty
+      !newTime.trim() || // Now check if time is empty
       !["low", "medium", "high"].includes(newPriority.toLowerCase())
     ) {
       this.showAlertMessage(
-        "Invalid input for editing. Please ensure task is filled, date is YYYY-MM-DD, time is HH:MM, and priority is 'low', 'medium', or 'high'.",
+        "Invalid input for editing. Please ensure task, date, and time are filled, and priority is 'low', 'medium', or 'high'.",
         "error"
       );
       return;
@@ -314,7 +308,7 @@ class UIManager {
       newTime.trim(),
       newPriority.toLowerCase()
     );
-    // Directly update the DOM for the specific card instead of full re-render
+
     if (updatedTodo) {
       this._updateTodoCardInDOM(updatedTodo);
       this.showAlertMessage("Task updated successfully!", "success");
@@ -326,26 +320,24 @@ class UIManager {
 
   sortByDueDate() {
     this.todoManager.sortByDueDate();
-    this.renderTodos(); // Re-render to show sorted list
+    this.renderTodos();
     this.showAlertMessage("Tasks sorted by due date!", "success");
     this.updateProgress();
   }
 
   handleFilterTodos(filterType) {
     this.currentFilter = filterType;
-    this.renderTodos(); // Re-render to show filtered list
+    this.renderTodos();
     this.showAlertMessage(`Showing ${filterType} tasks.`, "info");
   }
 
-  // Handle search input
   handleSearch() {
     this.currentSearchQuery = this.searchInput.value.trim().toLowerCase();
-    this.renderTodos(); // Re-render to show filtered tasks based on search
-    // No alert message needed for every keypress, it's a continuous filter
+    this.renderTodos();
   }
 
   updateProgress() {
-    const totalTodos = this.todoManager.todos.length; // Progress is always based on total tasks
+    const totalTodos = this.todoManager.todos.length;
     const completedTodos = this.todoManager.todos.filter(
       (todo) => todo.completed
     ).length;
@@ -357,7 +349,6 @@ class UIManager {
     this.progressText.textContent = `Progress: ${progress}%`;
     this.progressBar.value = progress;
 
-    // Update progress bar color based on percentage
     this.progressBar.classList.remove(
       "progress-error",
       "progress-warning",
@@ -372,47 +363,56 @@ class UIManager {
     }
   }
 
-  // Helper to format date for display
   formatDate(dateString) {
-    if (!dateString || !this.isValidDate(dateString)) return "Invalid Date";
-    const today = new Date();
-    today.setHours(0, 0, 0, 0); // Normalize to start of day
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    if (!dateString) return "No Date";
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(today.getDate() + 1);
 
-    const [year, month, day] = dateString.split("-").map(Number);
-    const inputDate = new Date(year, month - 1, day); // Month is 0-indexed
+      const inputDate = new Date(dateString);
+      if (isNaN(inputDate.getTime())) return "Invalid Date";
 
-    if (inputDate.toDateString() === today.toDateString()) {
-      return "Today";
-    } else if (inputDate.toDateString() === tomorrow.toDateString()) {
-      return "Tomorrow";
-    } else {
-      return inputDate.toLocaleDateString(undefined, {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
+      if (inputDate.toDateString() === today.toDateString()) {
+        return "Today";
+      } else if (inputDate.toDateString() === tomorrow.toDateString()) {
+        return "Tomorrow";
+      } else {
+        return inputDate.toLocaleDateString(undefined, {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        });
+      }
+    } catch (e) {
+      console.error("Error formatting date:", e);
+      return "Invalid Date";
     }
   }
 
-  // Helper to format time for display
   formatTime(timeString) {
-    if (!timeString || !this.isValidTime(timeString)) return "Invalid Time";
-    const [hours, minutes] = timeString.split(":");
-    const date = new Date(); // Use a dummy date to format time
-    date.setHours(parseInt(hours));
-    date.setMinutes(parseInt(minutes));
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-    return date.toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true, // Use 12-hour format with AM/PM
-    });
+    if (!timeString) return "No Time";
+    try {
+      const [hours, minutes] = timeString.split(":");
+      if (hours === undefined || minutes === undefined) return "Invalid Time";
+
+      const date = new Date();
+      date.setHours(parseInt(hours));
+      date.setMinutes(parseInt(minutes));
+      date.setSeconds(0);
+      date.setMilliseconds(0);
+      return date.toLocaleTimeString(undefined, {
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } catch (e) {
+      console.error("Error formatting time:", e);
+      return "Invalid Time";
+    }
   }
 
-  // Creates the HTML string for a single todo card
   _createTodoCardHtml(todo) {
     const priorityColors = {
       low: "text-green-600 dark:text-green-400",
@@ -423,12 +423,10 @@ class UIManager {
     const formattedDate = this.formatDate(todo.date);
     const formattedTime = this.formatTime(todo.time);
 
-    // Apply line-through and text color if completed
     const taskTextClass = todo.completed
       ? "line-through text-gray-500 dark:text-gray-400"
       : "";
 
-    // The inner content of the card div (excluding the outer card div itself)
     return `
       <div class="card-item flex items-center p-4">
         <input type="checkbox" class="checkbox complete-button mr-4" ${
@@ -454,20 +452,16 @@ class UIManager {
     `;
   }
 
-  // Updates the content of an existing todo card in the DOM
   _updateTodoCardInDOM(updatedTodo) {
     const existingCard = this.todosList.querySelector(
       `[data-id="${updatedTodo.id}"]`
     );
     if (existingCard) {
-      // Toggle 'completed' class on the outer card div
       existingCard.classList.toggle("completed", updatedTodo.completed);
 
-      // Re-generate the inner HTML content to reflect all changes (task text, completion status, priority etc.)
       const newInnerHtml = this._createTodoCardHtml(updatedTodo);
-      existingCard.innerHTML = newInnerHtml; // Replace inner content
+      existingCard.innerHTML = newInnerHtml;
 
-      // Apply filter and search display logic if active
       const shouldDisplay =
         (this.currentFilter === "all" ||
           (this.currentFilter === "pending" && !updatedTodo.completed) ||
@@ -475,21 +469,18 @@ class UIManager {
         (this.currentSearchQuery === "" ||
           updatedTodo.task.toLowerCase().includes(this.currentSearchQuery));
 
-      existingCard.style.display = shouldDisplay ? "" : "none"; // Hide/show based on filter and search
+      existingCard.style.display = shouldDisplay ? "" : "none";
     }
   }
 
-  // Renders all todos based on the current filter AND search query
   renderTodos() {
-    // Pass both currentFilter and currentSearchQuery to getTodos
     const todosToRender = this.todoManager.getTodos(
       this.currentFilter,
       this.currentSearchQuery
     );
-    this.todosList.innerHTML = ""; // Clear existing list content
+    this.todosList.innerHTML = "";
 
     if (todosToRender.length === 0) {
-      // Display "No tasks yet!" or "No matching tasks!" message if the list is empty after filters/search
       let message = "No tasks yet!";
       let subMessage = "Add a new task above to get started.";
       if (
@@ -507,23 +498,19 @@ class UIManager {
         </div>
       `;
     } else {
-      // Append each todo card to the list
       todosToRender.forEach((todo) => {
         const todoCard = document.createElement("div");
-        todoCard.dataset.id = todo.id; // Store ID on the card element
+        todoCard.dataset.id = todo.id;
         todoCard.className = `card shadow-lg ${
           todo.completed ? "completed" : ""
-        }`; // Apply 'completed' class
-        todoCard.innerHTML = this._createTodoCardHtml(todo); // Set inner HTML
+        }`;
+        todoCard.innerHTML = this._createTodoCardHtml(todo);
         this.todosList.appendChild(todoCard);
       });
     }
 
-    this.updateProgress(); // Always update progress after any render
+    this.updateProgress();
 
-    // --- Display alert for pending tasks ---
-    // Only show this alert if not currently searching or filtering,
-    // to avoid redundant messages when user is actively looking for something else.
     if (this.currentFilter === "all" && this.currentSearchQuery === "") {
       const pendingTasks = this.todoManager.todos.filter(
         (todo) => !todo.completed

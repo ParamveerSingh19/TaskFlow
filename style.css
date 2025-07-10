@@ -149,17 +149,15 @@ body.theme-dark .dropdown .dropdown-content li a:hover {
 }
 
 body.theme-light .alert-message .alert {
-  background-color: #f3f4f6 !important; /* Gray 100 */
+  background-color: #f3f4f6 !important; /* Gray 100 - solid */
   color: #1f2937 !important; /* Gray 800 */
-  border: 1px solid #d1d5db; /* Gray 300 */
+  border: 1px solid #d1d5db; /* Gray 300 - solid */
 }
 
 body.theme-dark .alert-message .alert {
-  background-color: var(
-    --card-bg
-  ) !important; /* Matches dark card background */
+  background-color: #374151 !important; /* Use Slate 700 (solid) for dark theme alerts */
   color: var(--text-color) !important;
-  border: 1px solid #4a5568; /* Gray 600 */
+  border: 1px solid #4a5568 !important; /* Gray 600 (solid) for dark theme alert border */
 }
 
 /* Todos List Body */
@@ -364,7 +362,6 @@ body.theme-light .input-group > span {
 
 body.theme-dark .input-group > .search-input,
 body.theme-dark .input-group > span {
-  /* Corrected selector here */
   background-color: var(--btn-outline-bg-dark) !important;
   border-color: var(
     --btn-outline-text-dark
@@ -388,25 +385,27 @@ body.theme-dark .search-input::placeholder {
   opacity: 0.7;
 }
 
-/* Consistent focus styles */
-.input-group > .search-input:focus {
+/* Consistent focus styles: APPLY FOCUS TO THE PARENT INPUT-GROUP */
+.input-group:focus-within > .search-input, /* Target input child when parent is focus-within */
+.input-group:focus-within > span {
+  /* Target span child when parent is focus-within */
   outline: none;
   box-shadow: 0 0 0 2px var(--accent); /* Default focus ring uses accent */
   border-color: var(--accent) !important; /* Default border color uses accent */
 }
 
 /* NEW: Specific focus color for LIGHT THEME search bar */
-body.theme-light .input-group > .search-input:focus {
+body.theme-light .input-group:focus-within > .search-input,
+body.theme-light .input-group:focus-within > span {
   box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility in light theme */
   border-color: #06b6d4 !important; /* Cyan-500 for better visibility in light theme */
 }
 
 /* Add this for dark theme focus to ensure white outline */
-body.theme-dark .input-group > .search-input:focus {
-  box-shadow: 0 0 0 2px var(--btn-outline-text-dark); /* White outline for dark theme */
-  border-color: var(
-    --btn-outline-text-dark
-  ) !important; /* White border for dark theme */
+body.theme-dark .input-group:focus-within > .search-input,
+body.theme-dark .input-group:focus-within > span {
+  box-shadow: 0 0 0 2px #ffffff; /* White outline for dark theme */
+  border-color: #ffffff !important; /* White border for dark theme */
 }
 
 /* Explicit Priority Colors (override Tailwind defaults) */
@@ -469,6 +468,25 @@ body.theme-dark input[type="checkbox"].complete-button {
 }
 .progress.progress-success {
   background-color: rgba(22, 163, 74, 0.3);
+}
+
+/* Specific styling for the Delete All button to ensure consistent sizing and color */
+.delete-all-button {
+  height: 3rem; /* Matches default button height */
+  font-size: 1rem; /* Matches default button font size */
+  border-radius: 0.5rem; /* Matches default button border radius */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Custom darker red */
+  background-color: #be123c !important; /* A darker red, slightly less saturated */
+  border-color: #be123c !important; /* Match border to background */
+  color: white !important; /* Ensure text is white */
+}
+
+.delete-all-button:hover {
+  background-color: #9f1239 !important; /* Even darker on hover */
+  border-color: #9f1239 !important;
 }
 
 /* Responsive Design */
