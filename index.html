@@ -44,155 +44,160 @@
       </div>
     </header>
 
-    <main class="flex-1 p-6 overflow-y-auto">
-      <div class="alert-message" role="alert"></div>
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div class="lg:col-span-4">
-          <div
-            class="input-section bg-white/50 dark:bg-gray-800/50 p-6 rounded-lg shadow-2xl flex flex-col gap-6"
-          >
-            <input
-              type="text"
-              placeholder="Enter your task"
-              class="input input-bordered input-lg w-full task-input"
-              aria-label="Task description"
-            />
-            <div class="flex flex-col sm:flex-row gap-2">
-              <div class="floating-label-group w-full sm:w-1/2">
-                <input
-                  type="date"
-                  class="input input-bordered w-full schedule-date peer"
-                  id="schedule-date"
-                  aria-label="Schedule Date"
-                  placeholder="dd-mm-yyyy"
-                  value=""
-                />
-                <label for="schedule-date" class="placeholder-label"
-                  >Schedule Date</label
-                >
-              </div>
+    <!-- ✅ Fixed: Removed overflow-y-auto -->
+    <main class="flex-grow">
+      <div class="p-6">
+        <div class="alert-message" role="alert"></div>
 
-              <div class="floating-label-group w-full sm:w-1/2">
-                <input
-                  type="time"
-                  class="input input-bordered w-full schedule-time peer"
-                  id="schedule-time"
-                  aria-label="Schedule Time"
-                  placeholder="--:--"
-                  value=""
-                />
-                <label for="schedule-time" class="placeholder-label"
-                  >Schedule Time</label
-                >
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div class="lg:col-span-4">
+            <div
+              class="input-section bg-white/50 dark:bg-gray-800/50 p-6 rounded-lg shadow-2xl flex flex-col gap-6"
+            >
+              <input
+                type="text"
+                placeholder="Enter your task"
+                class="input input-bordered input-lg w-full task-input"
+                aria-label="Task description"
+              />
+              <div class="flex flex-col sm:flex-row gap-2">
+                <div class="floating-label-group w-full sm:w-1/2">
+                  <input
+                    type="date"
+                    class="input input-bordered w-full schedule-date peer"
+                    id="schedule-date"
+                    aria-label="Schedule Date"
+                    value=""
+                  />
+                  <label for="schedule-date" class="placeholder-label"
+                    >Schedule Date</label
+                  >
+                </div>
+
+                <div class="floating-label-group w-full sm:w-1/2">
+                  <input
+                    type="time"
+                    class="input input-bordered w-full schedule-time peer"
+                    id="schedule-time"
+                    aria-label="Schedule Time"
+                    value=""
+                  />
+                  <label for="schedule-time" class="placeholder-label"
+                    >Schedule Time</label
+                  >
+                </div>
               </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2">
-              <select
-                class="input input-bordered priority-select"
-                aria-label="Task Priority"
-              >
-                <option value="low" class="text-green-600 dark:text-green-400">
-                  Low
-                </option>
-                <option
-                  value="medium"
-                  class="text-yellow-600 dark:text-yellow-400"
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2">
+                <select
+                  class="input input-bordered priority-select"
+                  aria-label="Task Priority"
                 >
-                  Medium
-                </option>
-                <option value="high" class="text-red-600 dark:text-red-400">
-                  High
-                </option>
-              </select>
-              <button class="btn btn-primary add-task-button">
-                <i class="bx bx-plus bx-sm"></i> Add Task
-              </button>
+                  <option
+                    value="low"
+                    class="text-green-600 dark:text-green-400"
+                  >
+                    Low
+                  </option>
+                  <option
+                    value="medium"
+                    class="text-yellow-600 dark:text-yellow-400"
+                  >
+                    Medium
+                  </option>
+                  <option value="high" class="text-red-600 dark:text-red-400">
+                    High
+                  </option>
+                </select>
+                <button class="btn btn-primary add-task-button">
+                  <i class="bx bx-plus bx-sm"></i> Add Task
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div
-          class="lg:col-span-4 flex flex-col items-center p-4 rounded-lg shadow-md mb-4 progress-card"
-        >
-          <span
-            class="progress-text text-lg font-semibold mb-2"
-            id="progress-text"
-            >Progress: 0%</span
-          >
-          <progress
-            class="progress w-full"
-            value="0"
-            max="100"
-            id="progress-bar"
-          ></progress>
-        </div>
-
-        <div class="lg:col-span-1 flex flex-col gap-4">
           <div
-            class="sidebar-card bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg shadow-2xl"
+            class="lg:col-span-4 flex flex-col items-center p-4 rounded-lg shadow-md mb-4 progress-card"
           >
-            <h2 class="text-xl font-bold mb-4">Actions</h2>
-            <div class="flex flex-col gap-3">
-              <label class="input-group">
-                <span
-                  class="bg-base-200 dark:bg-gray-700 text-current border border-current"
-                  ><i class="bx bx-search bx-sm"></i
-                ></span>
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  class="input input-bordered input-md w-full search-input"
-                  aria-label="Search tasks"
-                />
-              </label>
+            <span
+              class="progress-text text-lg font-semibold mb-2"
+              id="progress-text"
+              >Progress: 0%</span
+            >
+            <progress
+              class="progress w-full"
+              value="0"
+              max="100"
+              id="progress-bar"
+            ></progress>
+          </div>
 
-              <button
-                class="btn btn-outline text-current w-full"
-                onclick="uiManager.sortByDueDate()"
-              >
-                Sort by Due Date
-              </button>
-
-              <div class="dropdown dropdown-end w-full">
-                <label
-                  tabindex="0"
-                  class="btn btn-outline text-current w-full"
-                  aria-label="Filter Tasks"
-                >
-                  <i class="bx bx-filter bx-sm"></i> Filter Tasks
+          <div class="lg:col-span-1 flex flex-col gap-4">
+            <div
+              class="sidebar-card bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg shadow-2xl"
+            >
+              <h2 class="text-xl font-bold mb-4">Actions</h2>
+              <div class="flex flex-col gap-3">
+                <label class="input-group">
+                  <span
+                    class="bg-base-200 dark:bg-gray-700 text-current border border-current"
+                    ><i class="bx bx-search bx-sm"></i
+                  ></span>
+                  <input
+                    type="text"
+                    placeholder="Search tasks..."
+                    class="input input-bordered input-md w-full search-input"
+                    aria-label="Search tasks"
+                  />
                 </label>
-                <ul
-                  tabindex="0"
-                  class="dropdown-content menu p-2 shadow-lg rounded-box w-52"
-                >
-                  <li>
-                    <a onclick="uiManager.handleFilterTodos('all')">All</a>
-                  </li>
-                  <li>
-                    <a onclick="uiManager.handleFilterTodos('pending')"
-                      >Pending</a
-                    >
-                  </li>
-                  <li>
-                    <a onclick="uiManager.handleFilterTodos('completed')"
-                      >Completed</a
-                    >
-                  </li>
-                </ul>
-              </div>
 
-              <button class="btn btn-error delete-all-button w-full">
-                <i class="bx bx-trash bx-sm"></i> Delete All
-              </button>
+                <button
+                  class="btn btn-outline text-current w-full"
+                  onclick="uiManager.sortByDueDate()"
+                >
+                  Sort by Due Date
+                </button>
+
+                <div class="dropdown dropdown-end w-full">
+                  <label
+                    tabindex="0"
+                    class="btn btn-outline text-current w-full"
+                    aria-label="Filter Tasks"
+                  >
+                    <i class="bx bx-filter bx-sm"></i> Filter Tasks
+                  </label>
+                  <ul
+                    tabindex="0"
+                    class="dropdown-content menu p-2 shadow-lg rounded-box w-52"
+                  >
+                    <li>
+                      <a onclick="uiManager.handleFilterTodos('all')">All</a>
+                    </li>
+                    <li>
+                      <a onclick="uiManager.handleFilterTodos('pending')"
+                        >Pending</a
+                      >
+                    </li>
+                    <li>
+                      <a onclick="uiManager.handleFilterTodos('completed')"
+                        >Completed</a
+                      >
+                    </li>
+                  </ul>
+                </div>
+
+                <button class="btn btn-error delete-all-button w-full">
+                  <i class="bx bx-trash bx-sm"></i> Delete All
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="lg:col-span-3">
-          <div
-            class="todos-list-body grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in"
-            id="todos-list"
-          ></div>
+          <div class="lg:col-span-3">
+            <div
+              class="todos-list-body grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 animate-fade-in"
+              id="todos-list"
+            ></div>
+          </div>
         </div>
       </div>
     </main>

@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
-/* Base styles */
+/* Base styles: Reset and Font */
 * {
   margin: 0;
   padding: 0;
@@ -8,12 +8,21 @@
   font-family: "Poppins", sans-serif;
 }
 
+/* Body: Flex container for sticky header/footer, main content handles scroll */
 body {
   transition: background-color 0.3s ease, color 0.3s ease;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden; /* Prevents horizontal scroll */
+  min-height: 100vh; /* Ensures body takes full viewport height */
+  display: flex; /* Enables flexbox layout */
+  flex-direction: column; /* Stacks header, main, footer vertically */
+  overflow-x: hidden; /* Prevents horizontal scrollbar for entire page */
+  /* Background gradient applied here to use theme variables */
+  background: linear-gradient(
+    to bottom right,
+    var(--bg-from),
+    var(--bg-via),
+    var(--bg-to)
+  );
+  color: var(--text-color);
 }
 
 /* Theme variables - Light */
@@ -28,8 +37,8 @@ body.theme-light {
   --btn-outline-text-light: #000000;
   --dropdown-hover-bg-light: #e0e0e0;
   --dropdown-hover-text-light: #000000;
-  --header-text: #000000; /* BLACK for light theme */
-  --completed-bg-light: #f0f0f0; /* Light gray */
+  --header-text: #000000;
+  --completed-bg-light: #f0f0f0;
   --completed-text-light: #888888;
 }
 
@@ -45,84 +54,69 @@ body.theme-dark {
   --btn-outline-text-dark: #ffffff;
   --dropdown-hover-bg-dark: #4a5568; /* Gray 600 */
   --dropdown-hover-text-dark: #ffffff;
-  --header-text: #ffffff; /* WHITE for dark theme */
-  --completed-bg-dark: #2a3b50; /* Darker slate for completed tasks */
-  --completed-text-dark: #a0a0a0; /* Lighter gray for completed text */
-}
-
-/* Body background color applying theme variables */
-body {
-  background: linear-gradient(
-    to bottom right,
-    var(--bg-from),
-    var(--bg-via),
-    var(--bg-to)
-  );
-  color: var(--text-color);
+  --header-text: #ffffff;
+  --completed-bg-dark: #2a3b50;
+  --completed-text-dark: #a0a0a0;
 }
 
 /* Input Section Styling */
 .input-section input,
 .input-section select {
-  padding: 0.75rem; /* Matches DaisyUI's input-lg padding */
+  padding: 0.75rem;
   font-size: 1rem;
-  min-height: 40px; /* DaisyUI's input-lg height is typically around 48px, this provides a min-height */
+  min-height: 40px;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   color: var(--text-color);
-  background-color: #fff; /* Default light theme background */
-  border: 1px solid #d1d5db; /* Default border for input-bordered */
-  border-radius: 0.5rem; /* Add border-radius to match the first image */
+  background-color: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
 }
 
 body.theme-dark .input-section input,
 body.theme-dark .input-section select {
-  background-color: #1f2937; /* Dark theme input background */
+  background-color: #1f2937;
   color: white;
-  border-color: #4a5568; /* Dark theme input border */
+  border-color: #4a5568;
 }
 
-/* NEW: Styles for floating labels for date/time inputs */
+/* Floating labels for date/time inputs */
 .floating-label-group {
   position: relative;
-  /* Ensure the wrapper respects flexbox sizing if it's in a flex container */
-  flex-grow: 1; /* Allow it to grow in flex containers */
-  flex-basis: 0; /* Default basis */
+  flex-grow: 1;
+  flex-basis: 0;
 }
 
 .floating-label-group .input {
-  padding-top: 1.5rem; /* Make space for the floating label */
-  padding-bottom: 0.75rem; /* Adjust bottom padding if needed */
-  height: auto; /* Allow height to adjust based on padding */
+  padding-top: 1.5rem;
+  padding-bottom: 0.75rem;
+  height: auto;
 }
 
 .floating-label-group .placeholder-label {
   position: absolute;
-  top: 0.5rem; /* Position the label at the top */
-  left: 0.75rem; /* Align with input padding */
-  font-size: 0.75rem; /* Smaller font for the label */
-  color: #6b7280; /* Gray color for the label */
-  pointer-events: none; /* Make label unclickable */
-  transition: all 0.2s ease-out; /* Smooth transition for label movement */
-  background-color: transparent; /* Ensure no background interferes */
-  z-index: 1; /* Ensure label is above input content initially */
+  top: 0.5rem;
+  left: 0.75rem;
+  font-size: 0.75rem;
+  color: #6b7280;
+  pointer-events: none;
+  transition: all 0.2s ease-out;
+  background-color: transparent;
+  z-index: 1;
 }
 
-/* Ensure placeholder text matches the initial label position for date/time inputs if they are empty */
-/* This creates the 'dd-mm-yyyy' and '--:--' look */
 .schedule-date::before,
 .schedule-time::before {
-  content: attr(placeholder); /* Use content property to display placeholder */
+  content: attr(placeholder);
   position: absolute;
-  top: 1.5rem; /* Position below the floating label */
+  top: 1.5rem;
   left: 0.75rem;
-  color: #9ca3af; /* Light gray for placeholder */
+  color: #9ca3af;
   pointer-events: none;
-  z-index: 0; /* Ensure it's behind the label but above the input */
+  z-index: 0;
   opacity: 1;
   transition: opacity 0.2s ease-out;
 }
 
-/* Hide the pseudo-element placeholder when the input has a value or is focused */
 .schedule-date:valid::before,
 .schedule-date:focus::before,
 .schedule-time:valid::before,
@@ -130,35 +124,29 @@ body.theme-dark .input-section select {
   opacity: 0;
 }
 
-/* Dark theme adjustments for new floating label styles */
 body.theme-dark .floating-label-group .placeholder-label {
-  color: #9ca3af; /* Lighter gray for dark theme label */
+  color: #9ca3af;
 }
 
 body.theme-dark .schedule-date::before,
 body.theme-dark .schedule-time::before {
-  color: rgba(255, 255, 255, 0.4); /* Dark theme placeholder */
+  color: rgba(255, 255, 255, 0.4);
 }
 
-/* Placeholder color for text inputs (original, kept for task-input) */
+/* Placeholder color for text inputs */
 .input-section input::placeholder {
   color: #888;
 }
 
 body.theme-dark .input-section input::placeholder {
-  color: rgba(
-    255,
-    255,
-    255,
-    0.5
-  ); /* Slightly lighter placeholder for dark theme */
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* Dropdown (DaisyUI) Theme Alignment */
 .dropdown .dropdown-content {
   background-color: var(--card-bg) !important;
   color: var(--text-color) !important;
-  border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for dropdowns */
+  border: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -169,7 +157,7 @@ body.theme-dark .input-section input::placeholder {
 .dropdown .dropdown-content li a {
   background-color: transparent !important;
   color: var(--text-color) !important;
-  padding: 0.75rem 1rem; /* Standard padding for dropdown items */
+  padding: 0.75rem 1rem;
 }
 
 body.theme-light .dropdown .dropdown-content li a:hover {
@@ -185,15 +173,15 @@ body.theme-dark .dropdown .dropdown-content li a:hover {
 /* Alert Messages */
 .alert-message {
   position: fixed;
-  top: 1rem; /* Space from top */
+  top: 1rem;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000; /* Ensure it's on top of everything */
+  z-index: 1000;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-  width: 90%; /* Responsive width */
-  max-width: 400px; /* Max width for larger screens */
+  width: 90%;
+  max-width: 400px;
 }
 
 .alert-message.show {
@@ -205,19 +193,19 @@ body.theme-dark .dropdown .dropdown-content li a:hover {
 .alert-message.hide {
   opacity: 0;
   visibility: hidden;
-  transform: translateX(-50%) scale(0.95); /* Slight scale down on hide */
+  transform: translateX(-50%) scale(0.95);
 }
 
 body.theme-light .alert-message .alert {
-  background-color: #f3f4f6 !important; /* Gray 100 - solid */
-  color: #1f2937 !important; /* Gray 800 */
-  border: 1px solid #d1d5db; /* Gray 300 - solid */
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db;
 }
 
 body.theme-dark .alert-message .alert {
-  background-color: #374151 !important; /* Use Slate 700 (solid) for dark theme alerts */
+  background-color: #374151 !important;
   color: var(--text-color) !important;
-  border: 1px solid #4a5568 !important; /* Gray 600 (solid) for dark theme alert border */
+  border: 1px solid #4a5568 !important;
 }
 
 /* Todos List Body */
@@ -225,8 +213,8 @@ body.theme-dark .alert-message .alert {
   display: grid;
   gap: 1rem;
   animation: fadeIn 0.5s ease-in-out;
-  width: 100%; /* Ensure it takes full width within its grid column */
-  max-width: 1200px; /* Max width for the whole list */
+  width: 100%;
+  max-width: 1200px; /* Max width for the entire list grid */
   margin-left: auto;
   margin-right: auto;
 }
@@ -261,7 +249,7 @@ body.theme-dark .alert-message .alert {
 .card.completed {
   background-color: var(--completed-bg-light);
   color: var(--completed-text-light);
-  text-decoration: none; /* Remove underline if any */
+  text-decoration: none;
 }
 
 body.theme-dark .card.completed {
@@ -270,7 +258,7 @@ body.theme-dark .card.completed {
 }
 
 .card.completed .font-semibold {
-  text-decoration: line-through; /* Strikethrough for completed task text */
+  text-decoration: line-through;
 }
 
 /* Priority dot styling */
@@ -299,19 +287,19 @@ body.theme-dark .card.completed {
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  word-break: break-word; /* Prevents long words from overflowing */
-  padding: 0.25rem 0; /* Vertical padding */
+  word-break: break-word;
+  padding: 0.25rem 0;
 }
 
 .card-item .flex-1 {
-  padding-right: 0.5rem; /* Space between text and actions */
+  padding-right: 0.5rem;
 }
 
 /* Action Buttons within Cards */
 .actions {
   display: flex;
   gap: 0.5rem;
-  flex-wrap: nowrap; /* Keep buttons on one line */
+  flex-wrap: nowrap;
 }
 
 .actions button {
@@ -322,15 +310,13 @@ body.theme-dark .card.completed {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.375rem; /* DaisyUI btn-sm border-radius */
+  border-radius: 0.375rem;
   transition: transform 0.3s ease, background-color 0.3s ease,
     box-shadow 0.3s ease;
 }
 
 .actions button:hover {
   transform: scale(1.05);
-  /* Use specific hover colors from DaisyUI or define custom ones if needed */
-  /* background-color: rgba(255, 255, 255, 0.2); This might override DaisyUI's hover */
 }
 
 /* Footer Author Text */
@@ -341,14 +327,13 @@ body.theme-dark .card.completed {
 }
 
 .author-text a:hover {
-  color: var(--accent); /* Accent color on hover */
+  color: var(--accent);
 }
 
 /* Progress Card Styling */
 .progress-card {
   transition: background-color 0.3s ease, color 0.3s ease,
     border-color 0.3s ease;
-  /* Added Tailwind classes directly in HTML for width and centering */
 }
 
 body.theme-light .progress-card {
@@ -365,9 +350,9 @@ body.theme-dark .progress-card {
 
 /* Styling for Sort by Due Date and Filter buttons */
 .btn-outline.text-current {
-  background-color: transparent; /* Default transparent background */
-  border-color: currentColor; /* Border matches current text color */
-  color: currentColor; /* Text color is current color */
+  background-color: transparent;
+  border-color: currentColor;
+  color: currentColor;
 }
 
 body.theme-light .btn-outline.text-current {
@@ -383,13 +368,13 @@ body.theme-dark .btn-outline.text-current {
 }
 
 body.theme-light .btn-outline.text-current:hover {
-  background-color: #c0ccda; /* Lighter slate on hover */
+  background-color: #c0ccda;
   border-color: #c0ccda;
   color: var(--btn-outline-text-light) !important;
 }
 
 body.theme-dark .btn-outline.text-current:hover {
-  background-color: #4a5568; /* Darker gray on hover */
+  background-color: #4a5568;
   border-color: #4a5568;
   color: var(--btn-outline-text-dark) !important;
 }
@@ -401,38 +386,33 @@ header .dropdown .btn.text-current i {
   color: var(--header-text) !important;
 }
 
-/* Updated: Styling for Search Input and Icon to match btn-outline.text-current */
+/* Styling for Search Input and Icon */
 .input-group > .search-input,
 .input-group > span {
-  /* Override DaisyUI/Tailwind defaults to ensure custom vars apply */
   background-color: transparent !important;
-  border: 2px solid transparent !important; /* Start with thicker transparent border */
-  color: var(--text-color) !important; /* Default to theme text color */
-  box-shadow: none; /* Reset any default shadows */
+  border: 2px solid transparent !important;
+  color: var(--text-color) !important;
+  box-shadow: none;
 }
 
 body.theme-light .input-group > .search-input,
 body.theme-light .input-group > span {
   background-color: var(--btn-outline-bg-light) !important;
-  border-color: var(
-    --btn-outline-text-light
-  ) !important; /* Border color matches text for outline effect */
+  border-color: var(--btn-outline-text-light) !important;
   color: var(--btn-outline-text-light) !important;
 }
 
 body.theme-dark .input-group > .search-input,
 body.theme-dark .input-group > span {
   background-color: var(--btn-outline-bg-dark) !important;
-  border-color: var(
-    --btn-outline-text-dark
-  ) !important; /* Border color matches text for outline effect */
+  border-color: var(--btn-outline-text-dark) !important;
   color: var(--btn-outline-text-dark) !important;
 }
 
 /* Placeholder color for search input */
 .search-input::placeholder {
-  color: var(--text-color); /* Default */
-  opacity: 0.6; /* Slightly faded */
+  color: var(--text-color);
+  opacity: 0.6;
 }
 
 body.theme-light .search-input::placeholder {
@@ -446,57 +426,53 @@ body.theme-dark .search-input::placeholder {
 }
 
 /* Consistent focus styles: APPLY FOCUS TO THE PARENT INPUT-GROUP */
-.input-group:focus-within > .search-input, /* Target input child when parent is focus-within */
+.input-group:focus-within > .search-input,
 .input-group:focus-within > span {
-  /* Target span child when parent is focus-within */
   outline: none;
-  box-shadow: 0 0 0 2px var(--accent); /* Default focus ring uses accent */
-  border-color: var(--accent) !important; /* Default border color uses accent */
+  box-shadow: 0 0 0 2px var(--accent);
+  border-color: var(--accent) !important;
 }
 
-/* NEW: Specific focus color for LIGHT THEME search bar */
 body.theme-light .input-group:focus-within > .search-input,
 body.theme-light .input-group:focus-within > span {
-  box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility in light theme */
-  border-color: #06b6d4 !important; /* Cyan-500 for better visibility in light theme */
+  box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility */
+  border-color: #06b6d4 !important;
 }
 
-/* Corrected: Specific focus color for DARK THEME search bar */
 body.theme-dark .input-group:focus-within > .search-input,
 body.theme-dark .input-group:focus-within > span {
-  /* Use the defined dark theme focus color variable */
-  box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility in dark theme */
+  box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility */
   border-color: #06b6d4 !important;
 }
 
 /* Explicit Priority Colors (override Tailwind defaults) */
 .text-red-600,
 .dark\:text-red-400 {
-  color: #dc2626 !important; /* Red 600 */
+  color: #dc2626 !important;
 }
 
 .text-yellow-600,
 .dark\:text-yellow-400 {
-  color: #d97706 !important; /* Orange 600 */
+  color: #d97706 !important;
 }
 
 .text-green-600,
 .dark\:text-green-400 {
-  color: #16a34a !important; /* Green 600 */
+  color: #16a34a !important;
 }
 
 /* Improved Checkbox Visibility */
 input[type="checkbox"].complete-button {
   width: 20px;
   height: 20px;
-  border: 2px solid #000; /* Black border for light theme */
-  accent-color: #111; /* Dark fill when checked */
+  border: 2px solid #000;
+  accent-color: #111;
   cursor: pointer;
 }
 
 body.theme-dark input[type="checkbox"].complete-button {
-  border-color: #fff; /* White border for dark theme */
-  accent-color: #ccc; /* Lighter fill when checked */
+  border-color: #fff;
+  accent-color: #ccc;
 }
 
 /* Progress Bar Color Classes */
@@ -531,22 +507,21 @@ body.theme-dark input[type="checkbox"].complete-button {
   background-color: rgba(22, 163, 74, 0.3);
 }
 
-/* Specific styling for the Delete All button to ensure consistent sizing and color */
+/* Specific styling for the Delete All button */
 .delete-all-button {
-  height: 3rem; /* Matches default button height */
-  font-size: 1rem; /* Matches default button font size */
-  border-radius: 0.5rem; /* Matches default button border radius */
+  height: 3rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Custom darker red */
-  background-color: #be123c !important; /* A darker red, slightly less saturated */
-  border-color: #be123c !important; /* Match border to background */
-  color: white !important; /* Ensure text is white */
+  background-color: #be123c !important;
+  border-color: #be123c !important;
+  color: white !important;
 }
 
 .delete-all-button:hover {
-  background-color: #9f1239 !important; /* Even darker on hover */
+  background-color: #9f1239 !important;
   border-color: #9f1239 !important;
 }
 
@@ -556,55 +531,45 @@ body.theme-dark input[type="checkbox"].complete-button {
     grid-template-columns: repeat(3, 1fr);
   }
   .input-section .flex.flex-col.sm\:flex-row {
-    /* For input section on larger screens (md and above), ensure 4 columns if desired */
-    /* Adjusting this to be a flex row that wraps as needed,
-       or apply grid if you specifically want 4 columns here across more elements */
-    flex-wrap: nowrap; /* Keep elements in one row for larger screens if possible */
+    flex-wrap: nowrap;
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
-  /* Medium screens (e.g., tablets) */
   .input-section .flex.flex-col.sm\:flex-row {
-    flex-wrap: wrap; /* Allow wrapping */
+    flex-wrap: wrap;
   }
   .todos-list-body {
-    grid-template-columns: repeat(2, 1fr); /* Two columns for todo cards */
+    grid-template-columns: repeat(2, 1fr);
   }
-  /* Ensure date/time inputs take half width each on medium screens */
   .floating-label-group {
     width: 50%;
   }
   .floating-label-group:nth-child(odd) {
-    /* Target the first date input in the pair */
-    padding-right: 0.5rem; /* Add some spacing between them */
+    padding-right: 0.5rem;
   }
   .floating-label-group:nth-child(even) {
-    /* Target the second time input in the pair */
-    padding-left: 0.5rem; /* Add some spacing between them */
+    padding-left: 0.5rem;
   }
 }
 
 @media (max-width: 767px) {
-  /* Small screens (e.g., mobile phones) */
   .todos-list-body {
-    grid-template-columns: 1fr; /* Single column for todo cards */
+    grid-template-columns: 1fr;
   }
   .input-section .flex.flex-col.sm\:flex-row {
-    flex-direction: column; /* Stack date/time vertically */
-    gap: 1rem; /* Space between stacked items */
+    flex-direction: column;
+    gap: 1rem;
   }
   .floating-label-group {
-    width: 100%; /* Full width on small screens */
+    width: 100%;
     padding-right: 0 !important;
     padding-left: 0 !important;
   }
-  /* Removed max-width from sidebar-card, input-section, progress-card,
-    as they should naturally fill 100% of their grid column on mobile */
   .sidebar-card,
   .input-section,
   .progress-card {
-    max-width: 100%; /* Explicitly ensure full width on small screens */
+    max-width: 100%;
   }
 }
 
@@ -618,4 +583,15 @@ body.theme-dark input[type="checkbox"].complete-button {
   .input-section {
     padding: 1rem;
   }
+}
+html,
+body {
+  height: auto !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+}
+
+main {
+  flex-grow: 1;
+  overflow: visible !important;
 }
