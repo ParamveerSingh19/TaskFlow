@@ -71,6 +71,7 @@ body {
   color: var(--text-color);
   background-color: #fff; /* Default light theme background */
   border: 1px solid #d1d5db; /* Default border for input-bordered */
+  border-radius: 0.5rem; /* Add border-radius to match the first image */
 }
 
 body.theme-dark .input-section input,
@@ -80,7 +81,66 @@ body.theme-dark .input-section select {
   border-color: #4a5568; /* Dark theme input border */
 }
 
-/* Placeholder color for text inputs */
+/* NEW: Styles for floating labels for date/time inputs */
+.floating-label-group {
+  position: relative;
+  /* Ensure the wrapper respects flexbox sizing if it's in a flex container */
+  flex-grow: 1; /* Allow it to grow in flex containers */
+  flex-basis: 0; /* Default basis */
+}
+
+.floating-label-group .input {
+  padding-top: 1.5rem; /* Make space for the floating label */
+  padding-bottom: 0.75rem; /* Adjust bottom padding if needed */
+  height: auto; /* Allow height to adjust based on padding */
+}
+
+.floating-label-group .placeholder-label {
+  position: absolute;
+  top: 0.5rem; /* Position the label at the top */
+  left: 0.75rem; /* Align with input padding */
+  font-size: 0.75rem; /* Smaller font for the label */
+  color: #6b7280; /* Gray color for the label */
+  pointer-events: none; /* Make label unclickable */
+  transition: all 0.2s ease-out; /* Smooth transition for label movement */
+  background-color: transparent; /* Ensure no background interferes */
+  z-index: 1; /* Ensure label is above input content initially */
+}
+
+/* Ensure placeholder text matches the initial label position for date/time inputs if they are empty */
+/* This creates the 'dd-mm-yyyy' and '--:--' look */
+.schedule-date::before,
+.schedule-time::before {
+  content: attr(placeholder); /* Use content property to display placeholder */
+  position: absolute;
+  top: 1.5rem; /* Position below the floating label */
+  left: 0.75rem;
+  color: #9ca3af; /* Light gray for placeholder */
+  pointer-events: none;
+  z-index: 0; /* Ensure it's behind the label but above the input */
+  opacity: 1;
+  transition: opacity 0.2s ease-out;
+}
+
+/* Hide the pseudo-element placeholder when the input has a value or is focused */
+.schedule-date:valid::before,
+.schedule-date:focus::before,
+.schedule-time:valid::before,
+.schedule-time:focus::before {
+  opacity: 0;
+}
+
+/* Dark theme adjustments for new floating label styles */
+body.theme-dark .floating-label-group .placeholder-label {
+  color: #9ca3af; /* Lighter gray for dark theme label */
+}
+
+body.theme-dark .schedule-date::before,
+body.theme-dark .schedule-time::before {
+  color: rgba(255, 255, 255, 0.4); /* Dark theme placeholder */
+}
+
+/* Placeholder color for text inputs (original, kept for task-input) */
 .input-section input::placeholder {
   color: #888;
 }
@@ -401,11 +461,12 @@ body.theme-light .input-group:focus-within > span {
   border-color: #06b6d4 !important; /* Cyan-500 for better visibility in light theme */
 }
 
-/* Add this for dark theme focus to ensure white outline */
+/* Corrected: Specific focus color for DARK THEME search bar */
 body.theme-dark .input-group:focus-within > .search-input,
 body.theme-dark .input-group:focus-within > span {
-  box-shadow: 0 0 0 2px #ffffff; /* White outline for dark theme */
-  border-color: #ffffff !important; /* White border for dark theme */
+  /* Use the defined dark theme focus color variable */
+  box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility in dark theme */
+  border-color: #06b6d4 !important;
 }
 
 /* Explicit Priority Colors (override Tailwind defaults) */
@@ -494,22 +555,33 @@ body.theme-dark input[type="checkbox"].complete-button {
   .todos-list-body {
     grid-template-columns: repeat(3, 1fr);
   }
-  .input-section .grid.sm\:grid-cols-4 {
+  .input-section .flex.flex-col.sm\:flex-row {
     /* For input section on larger screens (md and above), ensure 4 columns if desired */
-    grid-template-columns: repeat(4, 1fr);
+    /* Adjusting this to be a flex row that wraps as needed,
+       or apply grid if you specifically want 4 columns here across more elements */
+    flex-wrap: nowrap; /* Keep elements in one row for larger screens if possible */
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
   /* Medium screens (e.g., tablets) */
-  .input-section .grid.sm\:grid-cols-4 {
-    grid-template-columns: repeat(
-      2,
-      1fr
-    ) !important; /* Two columns for date/time/priority/button */
+  .input-section .flex.flex-col.sm\:flex-row {
+    flex-wrap: wrap; /* Allow wrapping */
   }
   .todos-list-body {
     grid-template-columns: repeat(2, 1fr); /* Two columns for todo cards */
+  }
+  /* Ensure date/time inputs take half width each on medium screens */
+  .floating-label-group {
+    width: 50%;
+  }
+  .floating-label-group:nth-child(odd) {
+    /* Target the first date input in the pair */
+    padding-right: 0.5rem; /* Add some spacing between them */
+  }
+  .floating-label-group:nth-child(even) {
+    /* Target the second time input in the pair */
+    padding-left: 0.5rem; /* Add some spacing between them */
   }
 }
 
@@ -518,8 +590,14 @@ body.theme-dark input[type="checkbox"].complete-button {
   .todos-list-body {
     grid-template-columns: 1fr; /* Single column for todo cards */
   }
-  .input-section .grid.sm\:grid-cols-4 {
-    grid-template-columns: 1fr; /* Single column for all input fields */
+  .input-section .flex.flex-col.sm\:flex-row {
+    flex-direction: column; /* Stack date/time vertically */
+    gap: 1rem; /* Space between stacked items */
+  }
+  .floating-label-group {
+    width: 100%; /* Full width on small screens */
+    padding-right: 0 !important;
+    padding-left: 0 !important;
   }
   /* Removed max-width from sidebar-card, input-section, progress-card,
     as they should naturally fill 100% of their grid column on mobile */

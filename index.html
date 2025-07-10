@@ -49,7 +49,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
         <div class="lg:col-span-4">
           <div
-            class="input-section bg-white/50 dark:bg-gray-800/50 p-6 rounded-lg shadow-2xl flex flex-col gap-4"
+            class="input-section bg-white/50 dark:bg-gray-800/50 p-6 rounded-lg shadow-2xl flex flex-col gap-6"
           >
             <input
               type="text"
@@ -57,29 +57,38 @@
               class="input input-bordered input-lg w-full task-input"
               aria-label="Task description"
             />
-            <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-              <div class="relative w-full sm:col-span-2 md:col-span-1">
+            <div class="flex flex-col sm:flex-row gap-2">
+              <div class="floating-label-group w-full sm:w-1/2">
                 <input
                   type="date"
-                  placeholder="dd-mm-yyyy"
-                  class="input input-bordered w-full schedule-date"
+                  class="input input-bordered w-full schedule-date peer"
                   id="schedule-date"
                   aria-label="Schedule Date"
+                  placeholder="dd-mm-yyyy"
+                  value=""
                 />
+                <label for="schedule-date" class="placeholder-label"
+                  >Schedule Date</label
+                >
               </div>
 
-              <div class="relative w-full sm:col-span-2 md:col-span-1">
+              <div class="floating-label-group w-full sm:w-1/2">
                 <input
                   type="time"
-                  placeholder="--:--"
-                  class="input input-bordered w-full schedule-time"
+                  class="input input-bordered w-full schedule-time peer"
                   id="schedule-time"
                   aria-label="Schedule Time"
+                  placeholder="--:--"
+                  value=""
                 />
+                <label for="schedule-time" class="placeholder-label"
+                  >Schedule Time</label
+                >
               </div>
-
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-2">
               <select
-                class="input input-bordered priority-select sm:col-span-2 md:col-span-1"
+                class="input input-bordered priority-select"
                 aria-label="Task Priority"
               >
                 <option value="low" class="text-green-600 dark:text-green-400">
@@ -95,9 +104,7 @@
                   High
                 </option>
               </select>
-              <button
-                class="btn btn-primary add-task-button sm:col-span-2 md:col-span-1"
-              >
+              <button class="btn btn-primary add-task-button">
                 <i class="bx bx-plus bx-sm"></i> Add Task
               </button>
             </div>
