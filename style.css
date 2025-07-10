@@ -62,14 +62,6 @@ body {
 }
 
 /* Input Section Styling */
-.input-section {
-  padding: 1.5rem;
-  border-radius: 0.75rem;
-  backdrop-filter: blur(5px);
-  transition: box-shadow 0.3s ease;
-  /* Added Tailwind classes directly in HTML for width and centering */
-}
-
 .input-section input,
 .input-section select {
   padding: 0.75rem; /* Matches DaisyUI's input-lg padding */
@@ -344,14 +336,68 @@ body.theme-dark .btn-outline.text-current:hover {
   color: var(--btn-outline-text-dark) !important;
 }
 
-/* HEADER TEXT AND ICON COLOR OVERRIDE */
-/* Ensures header h1 and palette icon respect --header-text variable */
+/* Header H1 Text Color */
 header h1,
 header .dropdown .btn.text-current,
 header .dropdown .btn.text-current i {
-  color: var(
-    --header-text
-  ) !important; /* Use !important to strongly apply theme color */
+  color: var(--header-text) !important;
+}
+
+/* Updated: Styling for Search Input and Icon to match btn-outline.text-current */
+.input-group > .search-input,
+.input-group > span {
+  /* Override DaisyUI/Tailwind defaults to ensure custom vars apply */
+  background-color: transparent !important;
+  border: 2px solid transparent !important; /* Start with thicker transparent border */
+  color: var(--text-color) !important; /* Default to theme text color */
+  box-shadow: none; /* Reset any default shadows */
+}
+
+body.theme-light .input-group > .search-input,
+body.theme-light .input-group > span {
+  background-color: var(--btn-outline-bg-light) !important;
+  border-color: var(
+    --btn-outline-text-light
+  ) !important; /* Border color matches text for outline effect */
+  color: var(--btn-outline-text-light) !important;
+}
+
+body.theme-dark .input-group > .search-input,
+body.theme-dark .input-group > span {
+  background-color: var(--btn-outline-bg-dark) !important;
+  border-color: var(
+    --btn-outline-text-dark
+  ) !important; /* Border color matches text for outline effect */
+  color: var(--btn-outline-text-dark) !important;
+}
+
+/* Placeholder color for search input */
+.search-input::placeholder {
+  color: var(--text-color); /* Default */
+  opacity: 0.6; /* Slightly faded */
+}
+
+body.theme-light .search-input::placeholder {
+  color: var(--btn-outline-text-light);
+  opacity: 0.7;
+}
+
+body.theme-dark .search-input::placeholder {
+  color: var(--btn-outline-text-dark);
+  opacity: 0.7;
+}
+
+/* Consistent focus styles */
+.input-group > .search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent); /* Default focus ring uses accent */
+  border-color: var(--accent) !important; /* Default border color uses accent */
+}
+
+/* NEW: Specific focus color for LIGHT THEME search bar */
+body.theme-light .input-group > .search-input:focus {
+  box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility in light theme */
+  border-color: #06b6d4 !important; /* Cyan-500 for better visibility in light theme */
 }
 
 /* Explicit Priority Colors (override Tailwind defaults) */

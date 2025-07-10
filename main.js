@@ -44,13 +44,25 @@ class TodoManager {
     return todo; // Return the updated todo for UI refresh
   }
 
-  getTodos(filter = "all") {
+  // Modified: Now accepts a search query
+  getTodos(filter = "all", searchQuery = "") {
+    let filteredTodos = [];
     if (filter === "pending") {
-      return this.todos.filter((todo) => !todo.completed);
+      filteredTodos = this.todos.filter((todo) => !todo.completed);
     } else if (filter === "completed") {
-      return this.todos.filter((todo) => todo.completed);
+      filteredTodos = this.todos.filter((todo) => todo.completed);
+    } else {
+      filteredTodos = this.todos;
     }
-    return this.todos;
+
+    if (searchQuery) {
+      const lowerCaseQuery = searchQuery.toLowerCase();
+      filteredTodos = filteredTodos.filter((todo) =>
+        todo.task.toLowerCase().includes(lowerCaseQuery)
+      );
+    }
+
+    return filteredTodos;
   }
 
   sortByDueDate() {
@@ -105,7 +117,10 @@ class UIManager {
     this.progressBar = document.getElementById("progress-bar");
     this.clearAllModal = document.getElementById("clear_all_modal");
     this.confirmClearAllBtn = document.getElementById("confirm-clear-all");
+    this.searchInput = document.querySelector(".search-input"); // NEW: Search input element
+
     this.currentFilter = "all"; // Default filter
+    this.currentSearchQuery = ""; // NEW: Default search query
 
     this.alertTimeout = null;
 
@@ -138,6 +153,16 @@ class UIManager {
     this.confirmClearAllBtn.addEventListener("click", () =>
       this.handleClearAllTodosConfirmed()
     );
+
+    // NEW: Search input event listener
+    this.searchInput.addEventListener("input", () => this.handleSearch());
+
+    // Filter buttons (assuming these exist in your HTML, e.g., for All, Pending, Completed)
+    // Add event listeners for your filter buttons, e.g.:
+    // document.getElementById('filter-all-btn').addEventListener('click', () => this.handleFilterTodos('all'));
+    // document.getElementById('filter-pending-btn').addEventListener('click', () => this.handleFilterTodos('pending'));
+    // document.getElementById('filter-completed-btn').addEventListener('click', () => this.handleFilterTodos('completed'));
+    // document.getElementById('sort-by-date-btn').addEventListener('click', () => this.sortByDueDate()); // Add this if you have a sort button
   }
 
   setInitialTheme() {
@@ -348,8 +373,15 @@ class UIManager {
     this.showAlertMessage(`Showing ${filterType} tasks.`, "info");
   }
 
+  // NEW: Handle search input
+  handleSearch() {
+    this.currentSearchQuery = this.searchInput.value.trim().toLowerCase();
+    this.renderTodos(); // Re-render to show filtered tasks based on search
+    // No alert message needed for every keypress, it's a continuous filter
+  }
+
   updateProgress() {
-    const totalTodos = this.todoManager.todos.length;
+    const totalTodos = this.todoManager.todos.length; // Progress is always based on total tasks
     const completedTodos = this.todoManager.todos.filter(
       (todo) => todo.completed
     ).length;
@@ -471,27 +503,43 @@ class UIManager {
       const newInnerHtml = this._createTodoCardHtml(updatedTodo);
       existingCard.innerHTML = newInnerHtml; // Replace inner content
 
-      // Apply filter display logic if the filter is active
+      // Apply filter and search display logic if active
       const shouldDisplay =
-        this.currentFilter === "all" ||
-        (this.currentFilter === "pending" && !updatedTodo.completed) ||
-        (this.currentFilter === "completed" && updatedTodo.completed);
-      existingCard.style.display = shouldDisplay ? "" : "none"; // Hide/show based on filter
+        (this.currentFilter === "all" ||
+          (this.currentFilter === "pending" && !updatedTodo.completed) ||
+          (this.currentFilter === "completed" && updatedTodo.completed)) &&
+        (this.currentSearchQuery === "" ||
+          updatedTodo.task.toLowerCase().includes(this.currentSearchQuery));
+
+      existingCard.style.display = shouldDisplay ? "" : "none"; // Hide/show based on filter and search
     }
   }
 
-  // Renders all todos based on the current filter
+  // Renders all todos based on the current filter AND search query
   renderTodos() {
-    const todosToRender = this.todoManager.getTodos(this.currentFilter);
+    // Pass both currentFilter and currentSearchQuery to getTodos
+    const todosToRender = this.todoManager.getTodos(
+      this.currentFilter,
+      this.currentSearchQuery
+    );
     this.todosList.innerHTML = ""; // Clear existing list content
 
     if (todosToRender.length === 0) {
-      // Display "No tasks yet!" message if the list is empty
+      // Display "No tasks yet!" or "No matching tasks!" message if the list is empty after filters/search
+      let message = "No tasks yet!";
+      let subMessage = "Add a new task above to get started.";
+      if (
+        this.todoManager.todos.length > 0 &&
+        (this.currentFilter !== "all" || this.currentSearchQuery !== "")
+      ) {
+        message = "No matching tasks!";
+        subMessage = "Try adjusting your filters or search query.";
+      }
       this.todosList.innerHTML = `
         <div class="col-span-full text-center py-8">
             <i class='bx bx-list-check bx-lg text-gray-400 dark:text-gray-600 mb-4'></i>
-            <p class="text-xl text-gray-500 dark:text-gray-400 font-semibold">No tasks yet!</p>
-            <p class="text-gray-500 dark:text-gray-400 mt-2">Add a new task above to get started.</p>
+            <p class="text-xl text-gray-500 dark:text-gray-400 font-semibold">${message}</p>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">${subMessage}</p>
         </div>
       `;
     } else {
@@ -506,7 +554,23 @@ class UIManager {
         this.todosList.appendChild(todoCard);
       });
     }
+
     this.updateProgress(); // Always update progress after any render
+
+    // --- NEW: Display alert for pending tasks ---
+    // Only show this alert if not currently searching or filtering,
+    // to avoid redundant messages when user is actively looking for something else.
+    if (this.currentFilter === "all" && this.currentSearchQuery === "") {
+      const pendingTasks = this.todoManager.todos.filter(
+        (todo) => !todo.completed
+      );
+      if (pendingTasks.length > 0) {
+        this.showAlertMessage(
+          `You have ${pendingTasks.length} pending task(s)!`,
+          "warning"
+        );
+      }
+    }
   }
 }
 
