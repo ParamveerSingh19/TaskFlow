@@ -58,20 +58,30 @@
               aria-label="Task description"
             />
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-              <input
-                type="date"
-                **placeholder="Select date"
-                **
-                class="input input-bordered schedule-date"
-                aria-label="Schedule Date"
-              />
-              <input
-                type="time"
-                **placeholder="Select time"
-                **
-                class="input input-bordered schedule-time"
-                aria-label="Schedule Time"
-              />
+              <div class="relative w-full">
+                <input
+                  type="date"
+                  class="input input-bordered w-full schedule-date custom-placeholder-input"
+                  id="schedule-date"
+                  aria-label="Schedule Date"
+                />
+                <label for="schedule-date" class="custom-placeholder-label">
+                  Select Date
+                </label>
+              </div>
+
+              <div class="relative w-full">
+                <input
+                  type="time"
+                  class="input input-bordered w-full schedule-time custom-placeholder-input"
+                  id="schedule-time"
+                  aria-label="Schedule Time"
+                />
+                <label for="schedule-time" class="custom-placeholder-label">
+                  Select Time
+                </label>
+              </div>
+
               <select
                 class="input input-bordered priority-select"
                 aria-label="Task Priority"

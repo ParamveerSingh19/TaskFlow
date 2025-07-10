@@ -123,16 +123,28 @@ body.theme-dark .alert-message .alert {
 }
 
 .alert-message {
-  transition: all 0.3s ease;
-  transform: scale(0.95);
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  width: 90%;
+  max-width: 400px;
 }
 
 .alert-message.show {
-  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) scale(1);
 }
 
 .alert-message.hide {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) scale(0.95);
 }
 
 .todos-list-body {
@@ -317,7 +329,7 @@ header h1 {
   color: #16a34a !important;
 }
 
-/* ✅ Improved checkbox visibility */
+/* Improved checkbox visibility */
 input[type="checkbox"].complete-button {
   width: 20px;
   height: 20px;
@@ -329,6 +341,93 @@ body.theme-dark input[type="checkbox"].complete-button {
   border-color: #fff;
   accent-color: #ccc;
 }
+
+/* Progress bar color classes */
+.progress.progress-error::-webkit-progress-value {
+  background-color: #dc2626;
+}
+.progress.progress-error::-moz-progress-bar {
+  background-color: #dc2626;
+}
+.progress.progress-error {
+  background-color: rgba(220, 38, 38, 0.3);
+}
+
+.progress.progress-warning::-webkit-progress-value {
+  background-color: #d97706;
+}
+.progress.progress-warning::-moz-progress-bar {
+  background-color: #d97706;
+}
+.progress.progress-warning {
+  background-color: rgba(217, 119, 6, 0.3);
+}
+
+.progress.progress-success::-webkit-progress-value {
+  background-color: #16a34a;
+}
+.progress.progress-success::-moz-progress-bar {
+  background-color: #16a34a;
+}
+.progress.progress-success {
+  background-color: rgba(22, 163, 74, 0.3);
+}
+
+/* --- CUSTOM PLACEHOLDER LABELS (FIXED) --- */
+.custom-placeholder-label {
+  position: absolute;
+  top: 50%;
+  left: 0.75rem; /* Matches input padding-left */
+  transform: translateY(-50%);
+  color: #888; /* Placeholder color */
+  pointer-events: none; /* Allows clicks to pass through to the input */
+  /* Using opacity and visibility for more robust hiding */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+  font-size: 1rem; /* Match input font size */
+  background-color: transparent; /* Ensure no background interferes */
+  padding: 0;
+  margin: 0;
+  width: calc(100% - 1.5rem); /* Account for padding */
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: normal; /* Reset line-height */
+  z-index: 1; /* Ensure label is above input when visible */
+}
+
+/* Hide label when input has a value (via picker or typing) */
+.custom-placeholder-input:not(:placeholder-shown) + .custom-placeholder-label,
+.custom-placeholder-input:valid + .custom-placeholder-label {
+  opacity: 0;
+  visibility: hidden; /* Hide element completely */
+  transform: translateY(-50%) scale(0.9); /* Subtle transition out */
+}
+
+/* Hide label when input is focused (for browser date/time picker interaction) */
+.custom-placeholder-input:focus + .custom-placeholder-label {
+  opacity: 0;
+  visibility: hidden; /* Hide element completely */
+  transform: translateY(-50%) scale(0.9);
+}
+
+body.theme-dark .custom-placeholder-label {
+  color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Slightly lighter placeholder for dark theme */
+}
+
+.input-section .relative .input {
+  padding-left: 0.75rem; /* Ensure consistent padding for label alignment */
+  /* Add z-index to input to ensure it's above the label when needed, though pointer-events: none is key */
+  position: relative; /* Needed for z-index to apply */
+  z-index: 2; /* Ensure input field content is always on top */
+}
+/* --- END CUSTOM PLACEHOLDER LABELS (FIXED) --- */
 
 /* Responsive Design */
 @media (min-width: 1024px) {
