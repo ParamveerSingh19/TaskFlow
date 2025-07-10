@@ -55,19 +55,27 @@
               type="text"
               placeholder="Enter your task"
               class="input input-bordered input-lg w-full task-input"
+              aria-label="Task description"
             />
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
               <input
                 type="date"
-                placeholder="Enter date"
+                **placeholder="Select date"
+                **
                 class="input input-bordered schedule-date"
+                aria-label="Schedule Date"
               />
               <input
                 type="time"
-                placeholder="Enter time"
+                **placeholder="Select time"
+                **
                 class="input input-bordered schedule-time"
+                aria-label="Schedule Time"
               />
-              <select class="input input-bordered priority-select">
+              <select
+                class="input input-bordered priority-select"
+                aria-label="Task Priority"
+              >
                 <option value="low" class="text-green-600 dark:text-green-400">
                   Low
                 </option>
