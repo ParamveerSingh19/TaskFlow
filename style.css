@@ -363,8 +363,8 @@ body.theme-light .input-group > span {
 }
 
 body.theme-dark .input-group > .search-input,
-body.theme-dark > span {
-  /* corrected this selector */
+body.theme-dark .input-group > span {
+  /* Corrected selector here */
   background-color: var(--btn-outline-bg-dark) !important;
   border-color: var(
     --btn-outline-text-dark
@@ -399,6 +399,14 @@ body.theme-dark .search-input::placeholder {
 body.theme-light .input-group > .search-input:focus {
   box-shadow: 0 0 0 2px #06b6d4; /* Cyan-500 for better visibility in light theme */
   border-color: #06b6d4 !important; /* Cyan-500 for better visibility in light theme */
+}
+
+/* Add this for dark theme focus to ensure white outline */
+body.theme-dark .input-group > .search-input:focus {
+  box-shadow: 0 0 0 2px var(--btn-outline-text-dark); /* White outline for dark theme */
+  border-color: var(
+    --btn-outline-text-dark
+  ) !important; /* White border for dark theme */
 }
 
 /* Explicit Priority Colors (override Tailwind defaults) */
