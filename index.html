@@ -21,7 +21,7 @@
   </head>
   <body class="theme-light">
     <header
-      class="bg-teal-700 p-4 shadow-lg sticky top-0 z-50 flex justify-between items-center"
+      class="bg-teal-700 p-4 shadow-lg sticky top-0 z-50 flex justify-between items-center text-white"
     >
       <h1 class="text-3xl font-bold text-center w-full">TO-DO-LIST</h1>
       <div class="absolute right-4 flex gap-2">
@@ -58,32 +58,28 @@
               aria-label="Task description"
             />
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
-              <div class="relative w-full">
+              <div class="relative w-full sm:col-span-2 md:col-span-1">
                 <input
-                  type="date"
-                  class="input input-bordered w-full schedule-date custom-placeholder-input"
+                  type="text"
+                  placeholder="Enter date (YYYY-MM-DD)"
+                  class="input input-bordered w-full schedule-date"
                   id="schedule-date"
                   aria-label="Schedule Date"
                 />
-                <label for="schedule-date" class="custom-placeholder-label">
-                  Select Date
-                </label>
               </div>
 
-              <div class="relative w-full">
+              <div class="relative w-full sm:col-span-2 md:col-span-1">
                 <input
-                  type="time"
-                  class="input input-bordered w-full schedule-time custom-placeholder-input"
+                  type="text"
+                  placeholder="Enter time (HH:MM)"
+                  class="input input-bordered w-full schedule-time"
                   id="schedule-time"
                   aria-label="Schedule Time"
                 />
-                <label for="schedule-time" class="custom-placeholder-label">
-                  Select Time
-                </label>
               </div>
 
               <select
-                class="input input-bordered priority-select"
+                class="input input-bordered priority-select sm:col-span-2 md:col-span-1"
                 aria-label="Task Priority"
               >
                 <option value="low" class="text-green-600 dark:text-green-400">
@@ -99,7 +95,9 @@
                   High
                 </option>
               </select>
-              <button class="btn btn-primary add-task-button">
+              <button
+                class="btn btn-primary add-task-button sm:col-span-2 md:col-span-1"
+              >
                 <i class="bx bx-plus bx-sm"></i> Add Task
               </button>
             </div>
@@ -203,7 +201,7 @@
       </div>
     </dialog>
 
-    <footer class="bg-teal-800 text-center p-4 shadow-inner">
+    <footer class="bg-teal-800 text-center p-4 shadow-inner text-white">
       <p class="author-text">
         <a href="https://github.com/ParamveerSingh19" target="_blank"
           >Made by <b>Paramveer Singh</b></a

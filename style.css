@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
+/* Base styles */
 * {
   margin: 0;
   padding: 0;
@@ -12,41 +13,44 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: hidden; /* Prevents horizontal scroll */
 }
 
+/* Theme variables - Light */
 body.theme-light {
   --bg-from: #ffffff;
   --bg-via: #e6f3f5;
   --bg-to: #ffffff;
   --card-bg: rgba(255, 255, 255, 0.9);
   --text-color: #000000;
-  --accent: #047857;
-  --btn-outline-bg-light: #cbd5e1;
+  --accent: #047857; /* Teal 700 equivalent */
+  --btn-outline-bg-light: #cbd5e1; /* Slate 300 equivalent */
   --btn-outline-text-light: #000000;
   --dropdown-hover-bg-light: #e0e0e0;
   --dropdown-hover-text-light: #000000;
-  --header-text: #000000;
-  --completed-bg-light: #f0f0f0;
+  --header-text: #000000; /* BLACK for light theme */
+  --completed-bg-light: #f0f0f0; /* Light gray */
   --completed-text-light: #888888;
 }
 
+/* Theme variables - Dark */
 body.theme-dark {
-  --bg-from: #1e293b;
-  --bg-via: #0f172a;
-  --bg-to: #020617;
-  --card-bg: rgba(30, 41, 59, 0.9);
+  --bg-from: #1e293b; /* Slate 800 */
+  --bg-via: #0f172a; /* Slate 900 */
+  --bg-to: #020617; /* Slate 950 */
+  --card-bg: rgba(30, 41, 59, 0.9); /* Slate 800 with transparency */
   --text-color: #ffffff;
-  --accent: #34d399;
-  --btn-outline-bg-dark: #374151;
+  --accent: #34d399; /* Emerald 400 */
+  --btn-outline-bg-dark: #374151; /* Gray 700 */
   --btn-outline-text-dark: #ffffff;
-  --dropdown-hover-bg-dark: #4a5568;
+  --dropdown-hover-bg-dark: #4a5568; /* Gray 600 */
   --dropdown-hover-text-dark: #ffffff;
-  --header-text: #ffffff;
-  --completed-bg-dark: #2a3b50;
-  --completed-text-dark: #a0a0a0;
+  --header-text: #ffffff; /* WHITE for dark theme */
+  --completed-bg-dark: #2a3b50; /* Darker slate for completed tasks */
+  --completed-text-dark: #a0a0a0; /* Lighter gray for completed text */
 }
 
+/* Body background color applying theme variables */
 body {
   background: linear-gradient(
     to bottom right,
@@ -57,37 +61,53 @@ body {
   color: var(--text-color);
 }
 
+/* Input Section Styling */
 .input-section {
   padding: 1.5rem;
   border-radius: 0.75rem;
   backdrop-filter: blur(5px);
   transition: box-shadow 0.3s ease;
+  /* Added Tailwind classes directly in HTML for width and centering */
 }
 
 .input-section input,
 .input-section select {
-  padding: 0.75rem;
+  padding: 0.75rem; /* Matches DaisyUI's input-lg padding */
   font-size: 1rem;
-  min-height: 40px;
+  min-height: 40px; /* DaisyUI's input-lg height is typically around 48px, this provides a min-height */
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   color: var(--text-color);
-  background-color: #fff;
+  background-color: #fff; /* Default light theme background */
+  border: 1px solid #d1d5db; /* Default border for input-bordered */
 }
 
 body.theme-dark .input-section input,
 body.theme-dark .input-section select {
-  background-color: #1f2937;
+  background-color: #1f2937; /* Dark theme input background */
   color: white;
+  border-color: #4a5568; /* Dark theme input border */
 }
 
+/* Placeholder color for text inputs */
 .input-section input::placeholder {
   color: #888;
 }
 
-/* Ensure dropdowns truly follow the theme */
+body.theme-dark .input-section input::placeholder {
+  color: rgba(
+    255,
+    255,
+    255,
+    0.5
+  ); /* Slightly lighter placeholder for dark theme */
+}
+
+/* Dropdown (DaisyUI) Theme Alignment */
 .dropdown .dropdown-content {
   background-color: var(--card-bg) !important;
   color: var(--text-color) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Subtle border for dropdowns */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown .dropdown-content li {
@@ -97,6 +117,7 @@ body.theme-dark .input-section select {
 .dropdown .dropdown-content li a {
   background-color: transparent !important;
   color: var(--text-color) !important;
+  padding: 0.75rem 1rem; /* Standard padding for dropdown items */
 }
 
 body.theme-light .dropdown .dropdown-content li a:hover {
@@ -109,30 +130,18 @@ body.theme-dark .dropdown .dropdown-content li a:hover {
   color: var(--dropdown-hover-text-dark) !important;
 }
 
-/* Styling for alert messages in both themes */
-body.theme-light .alert-message .alert {
-  background-color: #f3f4f6 !important;
-  color: #1f2937 !important;
-  border: 1px solid #d1d5db;
-}
-
-body.theme-dark .alert-message .alert {
-  background-color: var(--card-bg) !important;
-  color: var(--text-color) !important;
-  border: 1px solid #4a5568;
-}
-
+/* Alert Messages */
 .alert-message {
   position: fixed;
-  top: 1rem;
+  top: 1rem; /* Space from top */
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 1000; /* Ensure it's on top of everything */
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-  width: 90%;
-  max-width: 400px;
+  width: 90%; /* Responsive width */
+  max-width: 400px; /* Max width for larger screens */
 }
 
 .alert-message.show {
@@ -144,13 +153,32 @@ body.theme-dark .alert-message .alert {
 .alert-message.hide {
   opacity: 0;
   visibility: hidden;
-  transform: translateX(-50%) scale(0.95);
+  transform: translateX(-50%) scale(0.95); /* Slight scale down on hide */
 }
 
+body.theme-light .alert-message .alert {
+  background-color: #f3f4f6 !important; /* Gray 100 */
+  color: #1f2937 !important; /* Gray 800 */
+  border: 1px solid #d1d5db; /* Gray 300 */
+}
+
+body.theme-dark .alert-message .alert {
+  background-color: var(
+    --card-bg
+  ) !important; /* Matches dark card background */
+  color: var(--text-color) !important;
+  border: 1px solid #4a5568; /* Gray 600 */
+}
+
+/* Todos List Body */
 .todos-list-body {
   display: grid;
   gap: 1rem;
   animation: fadeIn 0.5s ease-in-out;
+  width: 100%; /* Ensure it takes full width within its grid column */
+  max-width: 1200px; /* Max width for the whole list */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @keyframes fadeIn {
@@ -164,6 +192,7 @@ body.theme-dark .alert-message .alert {
   }
 }
 
+/* Individual Todo Card Styling */
 .card {
   background: var(--card-bg);
   padding: 1rem;
@@ -182,7 +211,7 @@ body.theme-dark .alert-message .alert {
 .card.completed {
   background-color: var(--completed-bg-light);
   color: var(--completed-text-light);
-  text-decoration: none;
+  text-decoration: none; /* Remove underline if any */
 }
 
 body.theme-dark .card.completed {
@@ -191,7 +220,7 @@ body.theme-dark .card.completed {
 }
 
 .card.completed .font-semibold {
-  text-decoration: line-through;
+  text-decoration: line-through; /* Strikethrough for completed task text */
 }
 
 /* Priority dot styling */
@@ -205,32 +234,34 @@ body.theme-dark .card.completed {
 }
 
 .priority-dot.low {
-  background-color: #16a34a;
+  background-color: #16a34a; /* Green */
 }
 .priority-dot.medium {
-  background-color: #d97706;
+  background-color: #d97706; /* Orange */
 }
 .priority-dot.high {
-  background-color: #dc2626;
+  background-color: #dc2626; /* Red */
 }
 
+/* Card Item Layout */
 .card-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 0.75rem;
-  word-break: break-word;
-  padding: 0.25rem 0;
+  word-break: break-word; /* Prevents long words from overflowing */
+  padding: 0.25rem 0; /* Vertical padding */
 }
 
 .card-item .flex-1 {
-  padding-right: 0.5rem;
+  padding-right: 0.5rem; /* Space between text and actions */
 }
 
+/* Action Buttons within Cards */
 .actions {
   display: flex;
   gap: 0.5rem;
-  flex-wrap: nowrap;
+  flex-wrap: nowrap; /* Keep buttons on one line */
 }
 
 .actions button {
@@ -241,14 +272,18 @@ body.theme-dark .card.completed {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease, background-color 0.3s ease;
+  border-radius: 0.375rem; /* DaisyUI btn-sm border-radius */
+  transition: transform 0.3s ease, background-color 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .actions button:hover {
   transform: scale(1.05);
-  background-color: rgba(255, 255, 255, 0.2);
+  /* Use specific hover colors from DaisyUI or define custom ones if needed */
+  /* background-color: rgba(255, 255, 255, 0.2); This might override DaisyUI's hover */
 }
 
+/* Footer Author Text */
 .author-text a {
   color: var(--text-color);
   text-decoration: none;
@@ -256,13 +291,14 @@ body.theme-dark .card.completed {
 }
 
 .author-text a:hover {
-  color: var(--accent);
+  color: var(--accent); /* Accent color on hover */
 }
 
-/* Styling for the Progress Card to match outline buttons */
+/* Progress Card Styling */
 .progress-card {
   transition: background-color 0.3s ease, color 0.3s ease,
     border-color 0.3s ease;
+  /* Added Tailwind classes directly in HTML for width and centering */
 }
 
 body.theme-light .progress-card {
@@ -279,9 +315,9 @@ body.theme-dark .progress-card {
 
 /* Styling for Sort by Due Date and Filter buttons */
 .btn-outline.text-current {
-  background-color: transparent;
-  border-color: currentColor;
-  color: currentColor;
+  background-color: transparent; /* Default transparent background */
+  border-color: currentColor; /* Border matches current text color */
+  color: currentColor; /* Text color is current color */
 }
 
 body.theme-light .btn-outline.text-current {
@@ -297,52 +333,59 @@ body.theme-dark .btn-outline.text-current {
 }
 
 body.theme-light .btn-outline.text-current:hover {
-  background-color: #c0ccda;
+  background-color: #c0ccda; /* Lighter slate on hover */
   border-color: #c0ccda;
   color: var(--btn-outline-text-light) !important;
 }
 
 body.theme-dark .btn-outline.text-current:hover {
-  background-color: #4a5568;
+  background-color: #4a5568; /* Darker gray on hover */
   border-color: #4a5568;
   color: var(--btn-outline-text-dark) !important;
 }
 
-/* Styling for Header H1 text color */
-header h1 {
-  color: var(--header-text);
+/* HEADER TEXT AND ICON COLOR OVERRIDE */
+/* Ensures header h1 and palette icon respect --header-text variable */
+header h1,
+header .dropdown .btn.text-current,
+header .dropdown .btn.text-current i {
+  color: var(
+    --header-text
+  ) !important; /* Use !important to strongly apply theme color */
 }
 
-/* Priority Colors */
+/* Explicit Priority Colors (override Tailwind defaults) */
 .text-red-600,
 .dark\:text-red-400 {
-  color: #dc2626 !important;
+  color: #dc2626 !important; /* Red 600 */
 }
 
 .text-yellow-600,
 .dark\:text-yellow-400 {
-  color: #d97706 !important;
+  color: #d97706 !important; /* Orange 600 */
 }
 
 .text-green-600,
 .dark\:text-green-400 {
-  color: #16a34a !important;
+  color: #16a34a !important; /* Green 600 */
 }
 
-/* Improved checkbox visibility */
+/* Improved Checkbox Visibility */
 input[type="checkbox"].complete-button {
   width: 20px;
   height: 20px;
-  border: 2px solid #000;
-  accent-color: #111;
+  border: 2px solid #000; /* Black border for light theme */
+  accent-color: #111; /* Dark fill when checked */
+  cursor: pointer;
 }
 
 body.theme-dark input[type="checkbox"].complete-button {
-  border-color: #fff;
-  accent-color: #ccc;
+  border-color: #fff; /* White border for dark theme */
+  accent-color: #ccc; /* Lighter fill when checked */
 }
 
-/* Progress bar color classes */
+/* Progress Bar Color Classes */
+/* Webkit (Chrome, Safari, Edge) */
 .progress.progress-error::-webkit-progress-value {
   background-color: #dc2626;
 }
@@ -373,93 +416,50 @@ body.theme-dark input[type="checkbox"].complete-button {
   background-color: rgba(22, 163, 74, 0.3);
 }
 
-/* --- CUSTOM PLACEHOLDER LABELS (FIXED) --- */
-.custom-placeholder-label {
-  position: absolute;
-  top: 50%;
-  left: 0.75rem; /* Matches input padding-left */
-  transform: translateY(-50%);
-  color: #888; /* Placeholder color */
-  pointer-events: none; /* Allows clicks to pass through to the input */
-  /* Using opacity and visibility for more robust hiding */
-  opacity: 1;
-  visibility: visible;
-  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
-  font-size: 1rem; /* Match input font size */
-  background-color: transparent; /* Ensure no background interferes */
-  padding: 0;
-  margin: 0;
-  width: calc(100% - 1.5rem); /* Account for padding */
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  line-height: normal; /* Reset line-height */
-  z-index: 1; /* Ensure label is above input when visible */
-}
-
-/* Hide label when input has a value (via picker or typing) */
-.custom-placeholder-input:not(:placeholder-shown) + .custom-placeholder-label,
-.custom-placeholder-input:valid + .custom-placeholder-label {
-  opacity: 0;
-  visibility: hidden; /* Hide element completely */
-  transform: translateY(-50%) scale(0.9); /* Subtle transition out */
-}
-
-/* Hide label when input is focused (for browser date/time picker interaction) */
-.custom-placeholder-input:focus + .custom-placeholder-label {
-  opacity: 0;
-  visibility: hidden; /* Hide element completely */
-  transform: translateY(-50%) scale(0.9);
-}
-
-body.theme-dark .custom-placeholder-label {
-  color: rgba(
-    255,
-    255,
-    255,
-    0.5
-  ); /* Slightly lighter placeholder for dark theme */
-}
-
-.input-section .relative .input {
-  padding-left: 0.75rem; /* Ensure consistent padding for label alignment */
-  /* Add z-index to input to ensure it's above the label when needed, though pointer-events: none is key */
-  position: relative; /* Needed for z-index to apply */
-  z-index: 2; /* Ensure input field content is always on top */
-}
-/* --- END CUSTOM PLACEHOLDER LABELS (FIXED) --- */
-
 /* Responsive Design */
 @media (min-width: 1024px) {
-  .grid.lg\:grid-cols-4 .lg\:col-span-3 {
+  .todos-list-body {
     grid-template-columns: repeat(3, 1fr);
   }
   .input-section .grid.sm\:grid-cols-4 {
+    /* For input section on larger screens (md and above), ensure 4 columns if desired */
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-@media (max-width: 1023px) {
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Medium screens (e.g., tablets) */
+  .input-section .grid.sm\:grid-cols-4 {
+    grid-template-columns: repeat(
+      2,
+      1fr
+    ) !important; /* Two columns for date/time/priority/button */
+  }
   .todos-list-body {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr); /* Two columns for todo cards */
+  }
+}
+
+@media (max-width: 767px) {
+  /* Small screens (e.g., mobile phones) */
+  .todos-list-body {
+    grid-template-columns: 1fr; /* Single column for todo cards */
   }
   .input-section .grid.sm\:grid-cols-4 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Single column for all input fields */
   }
-  .todos-controls {
-    flex-direction: column;
-    gap: 1rem;
+  /* Removed max-width from sidebar-card, input-section, progress-card,
+     as they should naturally fill 100% of their grid column on mobile */
+  .sidebar-card,
+  .input-section,
+  .progress-card {
+    max-width: 100%; /* Explicitly ensure full width on small screens */
   }
 }
 
 @media (max-width: 640px) {
   header h1 {
-    text-align: center;
     font-size: 1.5rem;
-    width: 100%;
-  }
-  .theme-switcher .btn {
-    padding: 0.25rem;
   }
   .card {
     padding: 0.75rem;

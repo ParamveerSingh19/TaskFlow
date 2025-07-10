@@ -113,7 +113,6 @@ class UIManager {
     this.setInitialTheme();
     this.renderTodos(); // Initial render based on loaded todos and current filter
     this.updateProgress(); // Update progress bar on load
-    this.initializeCustomPlaceholders(); // Set initial state of placeholders
   }
 
   initEventListeners() {
@@ -139,50 +138,6 @@ class UIManager {
     this.confirmClearAllBtn.addEventListener("click", () =>
       this.handleClearAllTodosConfirmed()
     );
-
-    // Event listeners for custom placeholder labels (input, change, focus, blur)
-    const customPlaceholderInputs = document.querySelectorAll(
-      ".custom-placeholder-input"
-    );
-    customPlaceholderInputs.forEach((input) => {
-      input.addEventListener("input", () => this.togglePlaceholderLabel(input));
-      input.addEventListener("change", () =>
-        this.togglePlaceholderLabel(input)
-      ); // Crucial for date/time pickers
-      input.addEventListener("focus", () =>
-        this.togglePlaceholderLabel(input, true)
-      );
-      input.addEventListener("blur", () => this.togglePlaceholderLabel(input));
-    });
-  }
-
-  // Ensures placeholders are correctly shown/hidden on initial load and after data changes
-  initializeCustomPlaceholders() {
-    const customPlaceholderInputs = document.querySelectorAll(
-      ".custom-placeholder-input"
-    );
-    customPlaceholderInputs.forEach((input) => {
-      this.togglePlaceholderLabel(input);
-    });
-  }
-
-  // Toggles the visibility of the custom placeholder label
-  togglePlaceholderLabel(inputElement) {
-    const label = inputElement.nextElementSibling;
-    if (!label || !label.classList.contains("custom-placeholder-label")) return;
-
-    // Check if the input has a non-empty string value or a 'valid' (filled by browser) state
-    // For type="date" and type="time", .value is empty until a selection is made
-    // but the browser might show "dd/mm/yyyy" as an implicit placeholder, so :not(:placeholder-shown) is key
-    if (inputElement.value.trim() !== "") {
-      label.style.opacity = "0";
-      label.style.visibility = "hidden"; // Fully hide
-      label.style.transform = "translateY(-50%) scale(0.9)";
-    } else {
-      label.style.opacity = "1";
-      label.style.visibility = "visible"; // Show
-      label.style.transform = "translateY(-50%) scale(1)";
-    }
   }
 
   setInitialTheme() {
@@ -213,29 +168,70 @@ class UIManager {
     }, 3000);
   }
 
+  // Helper for date validation (YYYY-MM-DD)
+  isValidDate(dateString) {
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!dateString.match(regex)) return false;
+    const date = new Date(dateString);
+    const [year, month, day] = dateString.split("-").map(Number);
+    // Check for valid date parts and if Date object parses it correctly
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() === month - 1 &&
+      date.getDate() === day
+    );
+  }
+
+  // Helper for time validation (HH:MM)
+  isValidTime(timeString) {
+    const regex = /^(?:2[0-3]|[01]?[0-9]):[0-5][0-9]$/; // 00:00 to 23:59
+    return timeString.match(regex);
+  }
+
   handleAddTodo() {
     const task = this.taskInput.value.trim();
-    const date = this.dateInput.value;
-    const time = this.timeInput.value;
+    const date = this.dateInput.value.trim();
+    const time = this.timeInput.value.trim();
     const priority = this.prioritySelect.value;
 
-    if (task && date && time) {
-      const newTodo = new Todo(task, date, time, priority);
-      this.todoManager.addTodo(newTodo);
-      this.renderTodos(); // Re-render to show new task and handle "No tasks yet!" removal
-      this.taskInput.value = "";
-      this.dateInput.value = "";
-      this.timeInput.value = "";
-      this.prioritySelect.value = "low";
-      this.showAlertMessage("Task added successfully!", "success");
-      this.updateProgress();
-      this.initializeCustomPlaceholders(); // Re-initialize placeholders after input clear
-    } else {
+    if (!task) {
+      this.showAlertMessage("Task description cannot be empty!", "error");
+      return;
+    }
+    if (!date) {
+      this.showAlertMessage("Date cannot be empty!", "error");
+      return;
+    }
+    if (!time) {
+      this.showAlertMessage("Time cannot be empty!", "error");
+      return;
+    }
+
+    if (!this.isValidDate(date)) {
       this.showAlertMessage(
-        "Please fill in all fields (Task, Date, Time)!",
+        "Please enter a valid date in YYYY-MM-DD format!",
         "error"
       );
+      return;
     }
+
+    if (!this.isValidTime(time)) {
+      this.showAlertMessage(
+        "Please enter a valid time in HH:MM format (e.g., 09:30 or 14:00)!",
+        "error"
+      );
+      return;
+    }
+
+    const newTodo = new Todo(task, date, time, priority);
+    this.todoManager.addTodo(newTodo);
+    this.renderTodos(); // Re-render to show new task and handle "No tasks yet!" removal
+    this.taskInput.value = "";
+    this.dateInput.value = "";
+    this.timeInput.value = "";
+    this.prioritySelect.value = "low";
+    this.showAlertMessage("Task added successfully!", "success");
+    this.updateProgress();
   }
 
   handleTodoActions(e) {
@@ -293,12 +289,14 @@ class UIManager {
     // Basic validation for new inputs
     if (
       !newTask.trim() ||
-      !newDate ||
-      !newTime ||
+      !newDate.trim() ||
+      !newTime.trim() ||
+      !this.isValidDate(newDate.trim()) || // Validate new date
+      !this.isValidTime(newTime.trim()) || // Validate new time
       !["low", "medium", "high"].includes(newPriority.toLowerCase())
     ) {
       this.showAlertMessage(
-        "Invalid input for editing. Please ensure task, date, time are filled, and priority is 'low', 'medium', or 'high'.",
+        "Invalid input for editing. Please ensure task is filled, date is YYYY-MM-DD, time is HH:MM, and priority is 'low', 'medium', or 'high'.",
         "error"
       );
       return;
@@ -307,8 +305,8 @@ class UIManager {
     const updatedTodo = this.todoManager.updateTodo(
       id,
       newTask.trim(),
-      newDate,
-      newTime,
+      newDate.trim(),
+      newTime.trim(),
       newPriority.toLowerCase()
     );
     // Directly update the DOM for the specific card instead of full re-render
@@ -380,7 +378,7 @@ class UIManager {
 
   // Helper to format date for display
   formatDate(dateString) {
-    if (!dateString) return "No Date";
+    if (!dateString || !this.isValidDate(dateString)) return "Invalid Date";
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Normalize to start of day
     const tomorrow = new Date(today);
@@ -404,7 +402,7 @@ class UIManager {
 
   // Helper to format time for display
   formatTime(timeString) {
-    if (!timeString) return "No Time";
+    if (!timeString || !this.isValidTime(timeString)) return "Invalid Time";
     const [hours, minutes] = timeString.split(":");
     const date = new Date(); // Use a dummy date to format time
     date.setHours(parseInt(hours));
@@ -509,7 +507,6 @@ class UIManager {
       });
     }
     this.updateProgress(); // Always update progress after any render
-    this.initializeCustomPlaceholders(); // Ensure placeholders are correct after any render
   }
 }
 
