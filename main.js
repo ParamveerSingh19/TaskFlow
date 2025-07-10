@@ -1,6 +1,6 @@
 class Todo {
   constructor(task, date, time, priority) {
-    this.id = Date.now().toString();
+    this.id = Date.now().toString(); // Unique ID based on timestamp
     this.task = task;
     this.date = date;
     this.time = time;
@@ -86,13 +86,6 @@ class TodoManager {
     this.saveTodos(); // Save after sorting
   }
 
-  clearAllTodos() {
-    if (this.todos.length === 0) return false; // Indicate nothing was cleared
-    this.todos = [];
-    this.saveTodos(); // Save after clearing
-    return true; // Indicate tasks were cleared
-  }
-
   saveTodos() {
     localStorage.setItem("todos", JSON.stringify(this.todos));
   }
@@ -115,12 +108,11 @@ class UIManager {
     this.alertMessage = document.querySelector(".alert-message");
     this.progressText = document.getElementById("progress-text");
     this.progressBar = document.getElementById("progress-bar");
-    this.clearAllModal = document.getElementById("clear_all_modal");
-    this.confirmClearAllBtn = document.getElementById("confirm-clear-all");
-    this.searchInput = document.querySelector(".search-input"); // NEW: Search input element
+
+    this.searchInput = document.querySelector(".search-input");
 
     this.currentFilter = "all"; // Default filter
-    this.currentSearchQuery = ""; // NEW: Default search query
+    this.currentSearchQuery = ""; // Default search query
 
     this.alertTimeout = null;
 
@@ -149,20 +141,8 @@ class UIManager {
       });
     });
 
-    // Clear All confirmation button listener
-    this.confirmClearAllBtn.addEventListener("click", () =>
-      this.handleClearAllTodosConfirmed()
-    );
-
-    // NEW: Search input event listener
+    // Search input event listener
     this.searchInput.addEventListener("input", () => this.handleSearch());
-
-    // Filter buttons (assuming these exist in your HTML, e.g., for All, Pending, Completed)
-    // Add event listeners for your filter buttons, e.g.:
-    // document.getElementById('filter-all-btn').addEventListener('click', () => this.handleFilterTodos('all'));
-    // document.getElementById('filter-pending-btn').addEventListener('click', () => this.handleFilterTodos('pending'));
-    // document.getElementById('filter-completed-btn').addEventListener('click', () => this.handleFilterTodos('completed'));
-    // document.getElementById('sort-by-date-btn').addEventListener('click', () => this.sortByDueDate()); // Add this if you have a sort button
   }
 
   setInitialTheme() {
@@ -344,22 +324,6 @@ class UIManager {
     }
   }
 
-  showClearAllConfirm() {
-    this.clearAllModal.showModal(); // DaisyUI modal method
-  }
-
-  handleClearAllTodosConfirmed() {
-    const cleared = this.todoManager.clearAllTodos();
-    if (cleared) {
-      this.renderTodos(); // Re-render to show "No tasks yet!"
-      this.showAlertMessage("All tasks deleted!", "success");
-    } else {
-      this.showAlertMessage("No tasks to delete!", "info");
-    }
-    this.updateProgress(); // Update progress bar
-    this.clearAllModal.close(); // Close modal
-  }
-
   sortByDueDate() {
     this.todoManager.sortByDueDate();
     this.renderTodos(); // Re-render to show sorted list
@@ -373,7 +337,7 @@ class UIManager {
     this.showAlertMessage(`Showing ${filterType} tasks.`, "info");
   }
 
-  // NEW: Handle search input
+  // Handle search input
   handleSearch() {
     this.currentSearchQuery = this.searchInput.value.trim().toLowerCase();
     this.renderTodos(); // Re-render to show filtered tasks based on search
@@ -557,7 +521,7 @@ class UIManager {
 
     this.updateProgress(); // Always update progress after any render
 
-    // --- NEW: Display alert for pending tasks ---
+    // --- Display alert for pending tasks ---
     // Only show this alert if not currently searching or filtering,
     // to avoid redundant messages when user is actively looking for something else.
     if (this.currentFilter === "all" && this.currentSearchQuery === "") {

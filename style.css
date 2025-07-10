@@ -363,7 +363,8 @@ body.theme-light .input-group > span {
 }
 
 body.theme-dark .input-group > .search-input,
-body.theme-dark .input-group > span {
+body.theme-dark > span {
+  /* corrected this selector */
   background-color: var(--btn-outline-bg-dark) !important;
   border-color: var(
     --btn-outline-text-dark
@@ -495,7 +496,7 @@ body.theme-dark input[type="checkbox"].complete-button {
     grid-template-columns: 1fr; /* Single column for all input fields */
   }
   /* Removed max-width from sidebar-card, input-section, progress-card,
-     as they should naturally fill 100% of their grid column on mobile */
+    as they should naturally fill 100% of their grid column on mobile */
   .sidebar-card,
   .input-section,
   .progress-card {

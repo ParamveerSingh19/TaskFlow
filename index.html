@@ -173,13 +173,6 @@
                   </li>
                 </ul>
               </div>
-
-              <button
-                class="btn btn-error bg-red-600 hover:bg-red-700 text-white w-full"
-                onclick="uiManager.showClearAllConfirm()"
-              >
-                Delete All
-              </button>
             </div>
           </div>
         </div>
@@ -192,27 +185,6 @@
         </div>
       </div>
     </main>
-
-    <dialog id="clear_all_modal" class="modal">
-      <div class="modal-box">
-        <h3 class="font-bold text-lg text-error">Confirm Deletion</h3>
-        <p class="py-4">
-          Are you sure you want to delete all tasks? This action cannot be
-          undone.
-        </p>
-        <div class="modal-action">
-          <form method="dialog">
-            <button class="btn btn-ghost">Cancel</button>
-            <button
-              id="confirm-clear-all"
-              class="btn btn-error bg-red-600 hover:bg-red-700 text-white"
-            >
-              Delete All
-            </button>
-          </form>
-        </div>
-      </div>
-    </dialog>
 
     <footer class="bg-teal-800 text-center p-4 shadow-inner text-white">
       <p class="author-text">
