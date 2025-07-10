@@ -6,15 +6,17 @@ A responsive, theme-switchable, and **highly optimized** TODO List web applicati
 
 ## 🚀 Features
 
--   ✅ Add, edit, delete, and mark tasks as completed
--   📅 Assign due dates to tasks
--   ⭐ Assign priorities (Low, Medium, High) to tasks
--   🔄 Sort tasks by due date
--   🔍 Filter tasks by All, Pending, or Completed
--   💾 Data is saved persistently in browser localStorage
--   ⚡ **Optimized performance** with debounced local storage saves and efficient DOM updates for a smoother user experience
--   🌗 Light and Dark theme support
--   📱 Fully responsive design for mobile and desktop
+- ✅ Add, edit, delete, and mark tasks as completed
+- 📅 Assign due dates to tasks
+- ⭐ Assign priorities (Low, Medium, High) to tasks
+- 🔄 Sort tasks by due date
+- 🔍 **Search Functionality:** Quickly find tasks by typing keywords in the search bar.
+- 🔄 **Filtering Options:** Filter tasks by All, Pending, or Completed status.
+- 💾 Data is saved persistently in browser localStorage
+- ⚡ **Optimized performance** with debounced local storage saves and efficient DOM updates for a smoother user experience
+- **🔔 Pending Task Notification:** Displays a subtle alert if you have uncompleted tasks, keeping your focus on what needs to be done.
+- 🌗 Light and Dark theme support
+- 📱 Fully responsive design for mobile and desktop
 
 ---
 
@@ -27,12 +29,12 @@ Experience TaskFlow in action! Visit the deployed project here:
 
 ## 🛠️ Tech Stack
 
--   **HTML5**
--   **CSS3**
--   **JavaScript (ES6)**
--   [TailwindCSS](https://tailwindcss.com)
--   [DaisyUI](https://daisyui.com)
--   [Boxicons](https://boxicons.com) (for icons)
+- **HTML5**
+- **CSS3**
+- **JavaScript (ES6)**
+- [TailwindCSS](https://tailwindcss.com)
+- [DaisyUI](https://daisyui.com)
+- [Boxicons](https://boxicons.com) (for icons)
 
 ---
 
