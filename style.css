@@ -193,13 +193,13 @@ body.theme-dark .card.completed {
 }
 
 .priority-dot.low {
-  background-color: #16a34a; /* Green */
+  background-color: #16a34a;
 }
 .priority-dot.medium {
-  background-color: #d97706; /* Yellow */
+  background-color: #d97706;
 }
 .priority-dot.high {
-  background-color: #dc2626; /* Red */
+  background-color: #dc2626;
 }
 
 .card-item {
@@ -315,6 +315,19 @@ header h1 {
 .text-green-600,
 .dark\:text-green-400 {
   color: #16a34a !important;
+}
+
+/* ✅ Improved checkbox visibility */
+input[type="checkbox"].complete-button {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #000;
+  accent-color: #111;
+}
+
+body.theme-dark input[type="checkbox"].complete-button {
+  border-color: #fff;
+  accent-color: #ccc;
 }
 
 /* Responsive Design */
