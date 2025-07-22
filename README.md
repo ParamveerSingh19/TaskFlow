@@ -42,11 +42,11 @@ Experience TaskFlow in action! Visit the deployed project here:
 
 1.  **Clone the repository**:
     ```bash
-    git clone [https://github.com/ParamveerSingh19/TaskFlow.git](https://github.com/ParamveerSingh19/TaskFlow.git)
+    git clone [https://github.com/ParamveerSingh19/taskflow.git]
     ```
 2.  **Navigate into the project folder**:
     ```bash
-    cd TaskFlow
+    cd taskflow
     ```
 3.  **Open `index.html` in your browser** to launch the application.
 
